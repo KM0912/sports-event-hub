@@ -226,7 +226,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full btn-primary py-3 disabled:opacity-50"
+            className="btn btn-primary w-full py-3 disabled:opacity-50"
           >
             {loading ? '処理中...' : mode === 'login' ? 'ログイン' : '登録する'}
           </button>
