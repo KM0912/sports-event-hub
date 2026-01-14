@@ -1,4 +1,14 @@
 import { EventForm } from '@/components/events/EventForm'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '練習会を作成',
+  description: '新しいバドミントン練習会を作成して、ビジターを募集しましょう。',
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default function NewEventPage() {
   return (

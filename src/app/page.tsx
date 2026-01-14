@@ -5,6 +5,53 @@ import { Suspense } from 'react'
 import { Calendar, Sparkles } from 'lucide-react'
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, parseISO } from 'date-fns'
 
+// トップページ用JSON-LD構造化データ
+function WebsiteJsonLd() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://miyagi-badminton.jp'
+  
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${baseUrl}/#website`,
+        url: baseUrl,
+        name: '宮城バドミントン練習会',
+        description: '宮城県のバドミントン練習会にビジターとして参加できるプラットフォーム',
+        inLanguage: 'ja',
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${baseUrl}/#organization`,
+        name: '宮城バドミントン練習会',
+        url: baseUrl,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${baseUrl}/og-image.png`,
+        },
+        sameAs: [],
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${baseUrl}/#webpage`,
+        url: baseUrl,
+        name: '宮城バドミントン練習会 | ビジター募集プラットフォーム',
+        isPartOf: { '@id': `${baseUrl}/#website` },
+        about: { '@id': `${baseUrl}/#organization` },
+        description: '宮城県のバドミントン練習会にビジターとして参加できるプラットフォーム。初心者から上級者まで、気軽に練習会を探して参加しよう。',
+        inLanguage: 'ja',
+      },
+    ],
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
+
 type SearchParams = Promise<{
   date?: string
   city?: string
@@ -131,7 +178,9 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
 
 export default async function HomePage(props: { searchParams: SearchParams }) {
   return (
-    <div>
+    <>
+      <WebsiteJsonLd />
+      <div>
       {/* Hero Section */}
       <section className="text-center mb-12 animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-4">
@@ -175,5 +224,6 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
         </Suspense>
       </section>
     </div>
+    </>
   )
 }

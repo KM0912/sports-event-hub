@@ -6,6 +6,16 @@ import { ja } from 'date-fns/locale'
 import { APPLICATION_STATUS, LEVELS, LevelKey } from '@/lib/constants'
 import { Calendar, MapPin, Clock, CheckCircle, XCircle, MessageCircle, User, Settings } from 'lucide-react'
 import clsx from 'clsx'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'マイページ',
+  description: '申請状況の確認、参加予定の練習会、参加履歴を確認できます。',
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default async function MyPage() {
   const supabase = await createClient()

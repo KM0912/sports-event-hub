@@ -6,6 +6,16 @@ import { ja } from 'date-fns/locale'
 import { EVENT_STATUS, LEVELS, LevelKey } from '@/lib/constants'
 import { Plus, Calendar, MapPin, Users, Clock, Edit, Eye, UserCheck, XCircle } from 'lucide-react'
 import clsx from 'clsx'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '主催者ダッシュボード',
+  description: '練習会の作成・管理、参加申請の確認ができる主催者専用ページ。',
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default async function DashboardPage() {
   const supabase = await createClient()

@@ -1,11 +1,86 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 
+const siteName = "宮城バドミントン練習会"
+const siteDescription = "宮城県のバドミントン練習会にビジターとして参加できるプラットフォーム。初心者から上級者まで、気軽に練習会を探して参加しよう。"
+const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://miyagi-badminton.jp"
+
 export const metadata: Metadata = {
-  title: "宮城バドミントン練習会 | ビジター募集プラットフォーム",
-  description: "宮城県のバドミントン練習会にビジターとして参加できるプラットフォーム。気軽に練習会を探して参加しよう。",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${siteName} | ビジター募集プラットフォーム`,
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  keywords: [
+    "バドミントン",
+    "練習会",
+    "宮城県",
+    "仙台",
+    "ビジター",
+    "スポーツ",
+    "サークル",
+    "初心者",
+    "中級者",
+    "上級者",
+  ],
+  authors: [{ name: siteName }],
+  creator: siteName,
+  publisher: siteName,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "ja_JP",
+    url: siteUrl,
+    siteName: siteName,
+    title: `${siteName} | ビジター募集プラットフォーム`,
+    description: siteDescription,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: siteName,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteName} | ビジター募集プラットフォーム`,
+    description: siteDescription,
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
+  verification: {
+    // Google Search Console の検証コードがある場合は追加
+    // google: "verification-code",
+  },
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#16a34a",
+}
 
 export default function RootLayout({
   children,
@@ -19,6 +94,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <Header />
