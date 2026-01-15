@@ -294,8 +294,8 @@ export function EventForm({ initialData, mode }: EventFormProps) {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="min-w-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div className="min-w-0 w-full flex-1">
               <label
                 htmlFor="start_at"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -312,7 +312,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                     : ""
                 }
                 onChange={handleChange}
-                className={`input ${
+                className={`input w-full ${
                   errors.start_at ? "input-error" : ""
                 }`}
               />
@@ -320,7 +320,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 <p className="text-sm text-error mt-1">{errors.start_at}</p>
               )}
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 w-full flex-1">
               <label
                 htmlFor="end_at"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -337,7 +337,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                     : ""
                 }
                 onChange={handleChange}
-                className={`input ${
+                className={`input w-full ${
                   errors.end_at ? "input-error" : ""
                 }`}
               />
@@ -347,7 +347,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
             </div>
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 w-full flex-1">
             <label
               htmlFor="deadline_hours_before"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -359,7 +359,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
               name="deadline_hours_before"
               value={formData.deadline_hours_before}
               onChange={handleChange}
-              className="input"
+              className="input w-full"
             >
               <option value="">指定なし</option>
               <option value="1">開始時間の1時間前</option>

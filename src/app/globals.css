@@ -100,7 +100,14 @@ body {
 
 /* Input */
 .input {
+  display: block;
   @apply w-full max-w-full px-3 sm:px-4 py-2 border border-border rounded-lg bg-white text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+}
+
+input[type="datetime-local"].input,
+select.input {
+  width: 100%;
+  min-width: 0;
 }
 
 .input-error {
