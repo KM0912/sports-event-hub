@@ -85,9 +85,9 @@ export function ApplyButton({
     return (
       <Link
         href={`/login?redirectTo=/events/${eventId}`}
-        className="btn btn-primary w-full md:w-auto"
+        className="btn btn-primary w-full md:w-auto text-base min-h-[48px] md:min-h-[44px]"
       >
-        <Send className="w-4 h-4" />
+        <Send className="w-5 h-5 md:w-4 md:h-4" />
         ログインして参加申請
       </Link>
     )
@@ -120,9 +120,9 @@ export function ApplyButton({
           <button
             onClick={handleCancel}
             disabled={cancelLoading}
-            className="btn btn-ghost text-error hover:bg-error/10"
+            className="btn btn-ghost text-error hover:bg-error/10 text-base min-h-[44px]"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5 md:w-4 md:h-4" />
             {cancelLoading ? '処理中...' : '申請をキャンセル'}
           </button>
         </div>
@@ -139,20 +139,20 @@ export function ApplyButton({
               <p className="text-sm text-muted">当日お待ちしています！</p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href={`/events/${eventId}/chat`}
-              className="btn btn-secondary"
+              className="btn btn-secondary text-base min-h-[44px]"
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-5 h-5 md:w-4 md:h-4" />
               主催者に連絡
             </Link>
             <button
               onClick={handleCancel}
               disabled={cancelLoading}
-              className="btn btn-ghost text-error hover:bg-error/10"
+              className="btn btn-ghost text-error hover:bg-error/10 text-base min-h-[44px]"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5 md:w-4 md:h-4" />
               {cancelLoading ? '処理中...' : '参加をキャンセル'}
             </button>
           </div>
@@ -206,9 +206,9 @@ export function ApplyButton({
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="btn btn-primary w-full md:w-auto"
+        className="btn btn-primary w-full md:w-auto text-base min-h-[48px] md:min-h-[44px]"
       >
-        <Send className="w-4 h-4" />
+        <Send className="w-5 h-5 md:w-4 md:h-4" />
         参加申請する
       </button>
 
@@ -256,23 +256,23 @@ export function ApplyButton({
               </label>
 
               <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="btn btn-ghost flex-1"
-                >
-                  キャンセル
-                </button>
-                <button
-                  onClick={handleApply}
-                  disabled={!agreedToRules || loading}
-                  className={clsx(
-                    'btn btn-primary flex-1',
-                    (!agreedToRules || loading) && 'opacity-50 cursor-not-allowed'
-                  )}
-                >
-                  <Send className="w-4 h-4" />
-                  {loading ? '送信中...' : '申請する'}
-                </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="btn btn-ghost flex-1 text-base min-h-[44px]"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleApply}
+                disabled={!agreedToRules || loading}
+                className={clsx(
+                  'btn btn-primary flex-1 text-base min-h-[44px]',
+                  (!agreedToRules || loading) && 'opacity-50 cursor-not-allowed'
+                )}
+              >
+                <Send className="w-5 h-5 md:w-4 md:h-4" />
+                {loading ? '送信中...' : '申請する'}
+              </button>
               </div>
             </div>
           </div>

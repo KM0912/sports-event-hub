@@ -70,22 +70,22 @@ export default async function MyPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Profile Header */}
-      <div className="card mb-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <User className="w-8 h-8 text-white" />
+      <div className="card mb-6 md:mb-8 p-4 md:p-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-20 h-20 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
+              <User className="w-10 h-10 md:w-8 md:h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900">
                 {profile?.display_name || 'ユーザー'}
               </h1>
-              <p className="text-muted">マイページ</p>
+              <p className="text-sm md:text-base text-muted">マイページ</p>
             </div>
           </div>
-          <Link href="/profile/edit" className="btn btn-ghost">
-            <Settings className="w-4 h-4" />
-            編集
+          <Link href="/profile/edit" className="btn btn-ghost text-base min-h-[44px] flex-shrink-0">
+            <Settings className="w-5 h-5 md:w-4 md:h-4" />
+            <span className="hidden sm:inline">編集</span>
           </Link>
         </div>
       </div>
@@ -257,13 +257,13 @@ function ApplicationCard({ application, type }: ApplicationCardProps) {
         </div>
         
         {type === 'approved' && !isCanceled && (
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             {canChat && (
               <Link
                 href={`/events/${event.id}/chat`}
-                className="btn btn-secondary text-sm"
+                className="btn btn-secondary text-base min-h-[44px]"
               >
-                <MessageCircle className="w-4 h-4" />
+                <MessageCircle className="w-5 h-5 md:w-4 md:h-4" />
                 連絡する
               </Link>
             )}
@@ -273,7 +273,7 @@ function ApplicationCard({ application, type }: ApplicationCardProps) {
         {type === 'pending' && (
           <Link
             href={`/events/${event.id}`}
-            className="btn btn-ghost text-sm"
+            className="btn btn-ghost text-base min-h-[44px] w-full sm:w-auto"
           >
             詳細を見る
           </Link>

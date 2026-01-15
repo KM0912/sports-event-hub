@@ -187,12 +187,13 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
           <Sparkles className="w-4 h-4" />
           宮城県のバドミントン練習会
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
           ビジターとして
+          <br className="md:hidden" />
           <span className="text-primary">気軽に参加</span>
           しよう
         </h1>
-        <p className="text-muted max-w-2xl mx-auto">
+        <p className="text-base md:text-lg text-muted max-w-2xl mx-auto px-2">
           宮城県内のバドミントン練習会を探して、ビジターとして参加できます。
           <br className="hidden md:block" />
           初心者から上級者まで、あなたにぴったりの練習会がきっと見つかります。

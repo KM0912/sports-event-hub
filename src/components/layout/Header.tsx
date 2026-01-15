@@ -114,7 +114,8 @@ export function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-muted-bg transition-colors"
+              className="md:hidden p-3 rounded-lg hover:bg-muted-bg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="メニューを開く"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -123,59 +124,65 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border animate-fade-in">
-            <nav className="flex flex-col gap-2">
-              <Link
-                href="/"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-muted-bg transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Calendar className="w-5 h-5 text-primary" />
-                練習会を探す
-              </Link>
-              {user ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-muted-bg transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <LayoutDashboard className="w-5 h-5 text-primary" />
-                    主催者ダッシュボード
-                  </Link>
-                  <Link
-                    href="/mypage"
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-muted-bg transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <UserIcon className="w-5 h-5 text-primary" />
-                    マイページ
-                  </Link>
-                  <div className="px-4 py-3 border-t border-border mt-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted">
-                        {displayName || 'ユーザー'}
-                      </span>
-                      <button
-                        onClick={handleSignOut}
-                        className="text-sm text-error font-medium"
-                      >
-                        ログアウト
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : (
+          <>
+            <div 
+              className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40 top-16"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <div className="md:hidden py-4 border-t border-border animate-slide-in bg-white relative z-50">
+              <nav className="flex flex-col gap-1">
                 <Link
-                  href="/login"
-                  className="btn btn-primary mx-4 mt-2"
+                  href="/"
+                  className="flex items-center gap-3 px-4 py-3.5 rounded-lg text-gray-700 hover:bg-muted-bg transition-colors min-h-[44px] text-base"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  ログイン
+                  <Calendar className="w-5 h-5 text-primary" />
+                  練習会を探す
                 </Link>
-              )}
-            </nav>
-          </div>
+                {user ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center gap-3 px-4 py-3.5 rounded-lg text-gray-700 hover:bg-muted-bg transition-colors min-h-[44px] text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <LayoutDashboard className="w-5 h-5 text-primary" />
+                      主催者ダッシュボード
+                    </Link>
+                    <Link
+                      href="/mypage"
+                      className="flex items-center gap-3 px-4 py-3.5 rounded-lg text-gray-700 hover:bg-muted-bg transition-colors min-h-[44px] text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <UserIcon className="w-5 h-5 text-primary" />
+                      マイページ
+                    </Link>
+                    <div className="px-4 py-3 border-t border-border mt-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm md:text-base text-muted">
+                          {displayName || 'ユーザー'}
+                        </span>
+                        <button
+                          onClick={handleSignOut}
+                          className="text-sm md:text-base text-error font-medium min-h-[44px] px-2"
+                        >
+                          ログアウト
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="btn btn-primary mx-4 mt-2 min-h-[48px] text-base"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    ログイン
+                  </Link>
+                )}
+              </nav>
+            </div>
+          </>
         )}
       </div>
     </header>

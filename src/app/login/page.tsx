@@ -189,7 +189,7 @@ function LoginForm() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
               メールアドレス
             </label>
             <div className="relative">
@@ -200,13 +200,13 @@ function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@email.com"
                 required
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-3.5 md:py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-base min-h-[44px]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
               パスワード
             </label>
             <div className="relative">
@@ -218,7 +218,7 @@ function LoginForm() {
                 placeholder="6文字以上"
                 required
                 minLength={6}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-3.5 md:py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-base min-h-[44px]"
               />
             </div>
           </div>
@@ -226,7 +226,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary w-full py-3 disabled:opacity-50"
+            className="btn btn-primary w-full py-3.5 md:py-3 disabled:opacity-50 text-base min-h-[48px] md:min-h-[44px]"
           >
             {loading ? '処理中...' : mode === 'login' ? 'ログイン' : '登録する'}
           </button>
@@ -246,7 +246,7 @@ function LoginForm() {
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all font-medium disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 md:py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all font-medium disabled:opacity-50 text-base min-h-[48px] md:min-h-[44px]"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path

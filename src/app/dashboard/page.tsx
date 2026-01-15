@@ -68,13 +68,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">主催者ダッシュボード</h1>
-          <p className="text-muted mt-1">練習会の管理・参加申請の確認</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">主催者ダッシュボード</h1>
+          <p className="text-sm md:text-base text-muted mt-1">練習会の管理・参加申請の確認</p>
         </div>
-        <Link href="/events/new" className="btn btn-primary">
-          <Plus className="w-4 h-4" />
+        <Link href="/events/new" className="btn btn-primary w-full sm:w-auto text-base min-h-[48px] sm:min-h-[44px]">
+          <Plus className="w-5 h-5 md:w-4 md:h-4" />
           練習会を作成
         </Link>
       </div>
@@ -144,32 +144,32 @@ export default async function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     <Link
                       href={`/events/${event.id}`}
-                      className="btn btn-ghost text-sm"
+                      className="btn btn-ghost text-base min-h-[44px]"
                     >
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-5 h-5 md:w-4 md:h-4" />
                       詳細
                     </Link>
                     <Link
                       href={`/events/${event.id}/edit`}
-                      className="btn btn-ghost text-sm"
+                      className="btn btn-ghost text-base min-h-[44px]"
                     >
-                      <Edit className="w-4 h-4" />
+                      <Edit className="w-5 h-5 md:w-4 md:h-4" />
                       編集
                     </Link>
                     <Link
                       href={`/events/${event.id}/applications`}
                       className={clsx(
-                        'btn text-sm',
+                        'btn text-base min-h-[44px]',
                         event.pendingCount > 0 ? 'btn-primary' : 'btn-secondary'
                       )}
                     >
-                      <UserCheck className="w-4 h-4" />
+                      <UserCheck className="w-5 h-5 md:w-4 md:h-4" />
                       申請管理
                       {event.pendingCount > 0 && (
-                        <span className="ml-1">({event.pendingCount})</span>
+                        <span className="ml-1 font-bold">({event.pendingCount})</span>
                       )}
                     </Link>
                   </div>
