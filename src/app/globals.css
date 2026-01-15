@@ -95,12 +95,12 @@ body {
 
 /* Card */
 .card {
-  @apply bg-card-bg rounded-xl shadow-md border border-border p-6;
+  @apply bg-card-bg rounded-xl shadow-md border border-border p-4 sm:p-6;
 }
 
 /* Input */
 .input {
-  @apply w-full px-4 py-2 border border-border rounded-lg bg-white text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+  @apply w-full max-w-full px-3 sm:px-4 py-2 border border-border rounded-lg bg-white text-gray-900 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
 }
 
 .input-error {

@@ -312,7 +312,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                     : ""
                 }
                 onChange={handleChange}
-                className={`input w-full min-w-0 ${
+                className={`input ${
                   errors.start_at ? "input-error" : ""
                 }`}
               />
@@ -337,7 +337,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                     : ""
                 }
                 onChange={handleChange}
-                className={`input w-full min-w-0 ${
+                className={`input ${
                   errors.end_at ? "input-error" : ""
                 }`}
               />
@@ -359,7 +359,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
               name="deadline_hours_before"
               value={formData.deadline_hours_before}
               onChange={handleChange}
-              className="input w-full min-w-0"
+              className="input"
             >
               <option value="">指定なし</option>
               <option value="1">開始時間の1時間前</option>
@@ -459,7 +459,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
         </h2>
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="level"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -480,7 +480,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 ))}
               </select>
             </div>
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="fee"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -504,7 +504,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 <p className="text-sm text-error mt-1">{errors.fee}</p>
               )}
             </div>
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="visitor_capacity"
                 className="block text-sm font-medium text-gray-700 mb-1"
