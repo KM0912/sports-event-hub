@@ -45,6 +45,7 @@ export default async function EditEventPage({ params }: PageProps) {
     equipment: event.equipment || '',
     notes: event.notes || '',
     application_deadline: event.application_deadline || '',
+    deadline_hours_before: '',
   }
 
   return (
