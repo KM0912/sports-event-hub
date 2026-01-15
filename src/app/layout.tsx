@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+import { PageTransitionLoader } from "@/components/layout/PageTransitionLoader";
 
 const siteName = "宮城バドミントン練習会";
 const siteDescription =
@@ -117,6 +118,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        <PageTransitionLoader />
         <Header />
         <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
           {children}
