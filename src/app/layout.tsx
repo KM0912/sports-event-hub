@@ -73,8 +73,7 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   verification: {
-    // Google Search Console の検証コードがある場合は追加
-    // google: "verification-code",
+    google: "58NKr0hbom_rCrK410wWDuvwNnXO_VxOyFJn61xlbmg",
   },
 };
 
