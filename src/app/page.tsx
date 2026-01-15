@@ -197,10 +197,11 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
           <span className="text-primary">気軽に参加</span>
           しよう
         </h1>
-        <p className="text-base md:text-lg lg:text-xl text-muted max-w-2xl mx-auto px-2 md:px-4">
-          宮城県内のバドミントン練習会を探して、ビジターとして参加できます。
-          <br className="hidden md:block" />
-          初心者から上級者まで、あなたにぴったりの練習会がきっと見つかります。
+        <p className="text-base md:text-lg lg:text-xl text-muted max-w-xl md:max-w-2xl mx-auto px-2 md:px-4 leading-relaxed">
+          宮城県内のバドミントン練習会を探して、<br className="hidden md:inline" />
+          ビジターとして参加できます。<br className="hidden md:inline" />
+          初心者から上級者まで、<br className="hidden md:inline" />
+          あなたにぴったりの練習会がきっと見つかります。
         </p>
       </section>
 
