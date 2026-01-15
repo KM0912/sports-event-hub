@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 
-const siteName = "宮城バドミントン練習会"
-const siteDescription = "宮城県のバドミントン練習会にビジターとして参加できるプラットフォーム。初心者から上級者まで、気軽に練習会を探して参加しよう。"
-const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://miyagi-badminton.jp"
+const siteName = "宮城バドミントン練習会";
+const siteDescription =
+  "宮城県のバドミントン練習会にビジターとして参加できるプラットフォーム。初心者から上級者まで、気軽に練習会を探して参加しよう。";
+const siteUrl =
+  process.env.NEXT_PUBLIC_BASE_URL || "https://miyagi-badminton.jp";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -80,7 +83,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: "#16a34a",
-}
+};
 
 export default function RootLayout({
   children,
@@ -98,6 +101,23 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
+        {/* Google tag (gtag.js) - 本番環境のみ */}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-NK2HQ6YZ6C"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-NK2HQ6YZ6C');
+              `}
+            </Script>
+          </>
+        )}
         <Header />
         <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
           {children}
