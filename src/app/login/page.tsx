@@ -116,7 +116,7 @@ function LoginForm() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center py-8">
-      <div className="card max-w-md w-full animate-fade-in">
+      <div className="card max-w-md md:max-w-lg w-full animate-fade-in">
         <div className="text-center mb-8">
           <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg mb-4">
             <span className="text-4xl">🏸</span>

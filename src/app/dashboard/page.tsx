@@ -68,10 +68,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8 lg:mb-10">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900">主催者ダッシュボード</h1>
-          <p className="text-sm md:text-base text-muted mt-1">練習会の管理・参加申請の確認</p>
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">主催者ダッシュボード</h1>
+          <p className="text-sm md:text-base lg:text-lg text-muted mt-1 md:mt-2">練習会の管理・参加申請の確認</p>
         </div>
         <Link href="/events/new" className="btn btn-primary w-full sm:w-auto text-base min-h-[48px] sm:min-h-[44px]">
           <Plus className="w-5 h-5 md:w-4 md:h-4" />
@@ -104,7 +104,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             {upcomingEvents.map((event, index) => (
               <div
                 key={event.id}

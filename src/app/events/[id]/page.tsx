@@ -270,7 +270,7 @@ export default async function EventDetailPage({ params }: PageProps) {
                 {LEVELS[event.level as LevelKey] || event.level}
               </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               {event.title}
             </h1>
             <div className="flex items-center gap-2 text-muted">
@@ -280,7 +280,7 @@ export default async function EventDetailPage({ params }: PageProps) {
           </header>
 
           {/* Main Info Grid */}
-          <div className="grid gap-4 md:gap-6 md:grid-cols-2 mb-8">
+          <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
             {/* Date & Time */}
             <div className="flex gap-3 md:gap-4">
               <div className="w-12 h-12 md:w-10 md:h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -374,12 +374,12 @@ export default async function EventDetailPage({ params }: PageProps) {
           </div>
 
           {/* Description */}
-          <section className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary" />
+          <section className="mb-6 md:mb-8">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 md:w-6 md:h-6 text-primary" />
               練習会について
             </h2>
-            <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+            <p className="text-base md:text-lg text-gray-700 whitespace-pre-wrap leading-relaxed">
               {event.description}
             </p>
           </section>

@@ -68,19 +68,19 @@ export default async function MyPage() {
   const canceledApps = applications?.filter(a => a.status === 'canceled') || []
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Profile Header */}
-      <div className="card mb-6 md:mb-8 p-4 md:p-6">
+      <div className="card mb-6 md:mb-8 p-4 md:p-6 lg:p-8">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="w-20 h-20 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
-              <User className="w-10 h-10 md:w-8 md:h-8 text-white" />
+          <div className="flex items-center gap-3 md:gap-4 lg:gap-6">
+            <div className="w-20 h-20 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
+              <User className="w-10 h-10 md:w-8 md:h-8 lg:w-10 lg:h-10 text-white" />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">
                 {profile?.display_name || 'ユーザー'}
               </h1>
-              <p className="text-sm md:text-base text-muted">マイページ</p>
+              <p className="text-sm md:text-base lg:text-lg text-muted">マイページ</p>
             </div>
           </div>
           <Link href="/profile/edit" className="btn btn-ghost text-base min-h-[44px] flex-shrink-0">

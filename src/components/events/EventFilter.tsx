@@ -37,6 +37,7 @@ export function EventFilter() {
     { label: '今日', value: 'today' },
     { label: '今週', value: 'week' },
     { label: '今月', value: 'month' },
+    { label: '来月', value: 'nextMonth' },
   ]
 
   return (
@@ -59,19 +60,19 @@ export function EventFilter() {
 
       {/* Filter Panel */}
       <div className={`${isOpen ? 'block' : 'hidden'} md:block`}>
-        <div className="card mt-4 md:mt-0">
-          <div className="flex flex-col md:flex-row md:flex-wrap gap-4">
+        <div className="card mt-4 md:mt-0 max-w-5xl mx-auto">
+          <div className="space-y-4 md:space-y-6">
             {/* Date Quick Filters */}
-            <div className="flex-1 min-w-full md:min-w-[200px]">
-              <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
+            <div>
+              <label className="block text-sm md:text-base font-medium text-gray-700 mb-2 md:mb-3">
                 日付
               </label>
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex flex-wrap gap-2 md:gap-3 mb-3">
                 {quickDateFilters.map(({ label, value }) => (
                   <button
                     key={value}
                     onClick={() => setDateFilter(dateFilter === value ? '' : value)}
-                    className={`px-4 py-2 rounded-full text-sm md:text-base font-medium transition-colors min-h-[44px] ${
+                    className={`px-3 md:px-4 py-2 rounded-full text-sm md:text-base font-medium transition-colors min-h-[44px] whitespace-nowrap flex-shrink-0 ${
                       dateFilter === value
                         ? 'bg-primary text-white shadow-md'
                         : 'bg-muted-bg text-muted hover:bg-gray-200'
@@ -83,45 +84,48 @@ export function EventFilter() {
               </div>
               <input
                 type="date"
-                value={dateFilter && !['today', 'week', 'month'].includes(dateFilter) ? dateFilter : ''}
+                value={dateFilter && !['today', 'week', 'month', 'nextMonth'].includes(dateFilter) ? dateFilter : ''}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="input min-h-[44px] text-base"
+                className="input min-h-[44px] text-base w-full"
                 placeholder="日付を選択"
               />
             </div>
 
-            {/* City Filter */}
-            <div className="flex-1 min-w-full md:min-w-[200px]">
-              <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
-                市区町村
-              </label>
-              <select
-                value={cityFilter}
-                onChange={(e) => setCityFilter(e.target.value)}
-                className="input min-h-[44px] text-base"
-              >
-                <option value="">すべて</option>
-                {MIYAGI_CITIES.map(city => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
-            </div>
+            {/* City and Level Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {/* City Filter */}
+              <div>
+                <label className="block text-sm md:text-base font-medium text-gray-700 mb-2 md:mb-3">
+                  市区町村
+                </label>
+                <select
+                  value={cityFilter}
+                  onChange={(e) => setCityFilter(e.target.value)}
+                  className="input min-h-[44px] text-base w-full"
+                >
+                  <option value="">すべて</option>
+                  {MIYAGI_CITIES.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Level Filter */}
-            <div className="flex-1 min-w-full md:min-w-[200px]">
-              <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
-                レベル
-              </label>
-              <select
-                value={levelFilter}
-                onChange={(e) => setLevelFilter(e.target.value)}
-                className="input min-h-[44px] text-base"
-              >
-                <option value="">すべて</option>
-                {Object.entries(LEVELS).map(([key, label]) => (
-                  <option key={key} value={key}>{label}</option>
-                ))}
-              </select>
+              {/* Level Filter */}
+              <div>
+                <label className="block text-sm md:text-base font-medium text-gray-700 mb-2 md:mb-3">
+                  レベル
+                </label>
+                <select
+                  value={levelFilter}
+                  onChange={(e) => setLevelFilter(e.target.value)}
+                  className="input min-h-[44px] text-base w-full"
+                >
+                  <option value="">すべて</option>
+                  {Object.entries(LEVELS).map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 

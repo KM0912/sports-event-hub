@@ -62,10 +62,10 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             <Link
               href="/"
-              className="px-4 py-2 rounded-lg text-gray-700 hover:bg-muted-bg hover:text-primary transition-colors font-medium"
+              className="px-4 py-2 rounded-lg text-gray-700 hover:bg-muted-bg hover:text-primary transition-colors font-medium text-sm lg:text-base"
             >
               練習会を探す
             </Link>
@@ -73,13 +73,13 @@ export function Header() {
               <>
                 <Link
                   href="/dashboard"
-                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-muted-bg hover:text-primary transition-colors font-medium"
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-muted-bg hover:text-primary transition-colors font-medium text-sm lg:text-base"
                 >
                   主催者ダッシュボード
                 </Link>
                 <Link
                   href="/mypage"
-                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-muted-bg hover:text-primary transition-colors font-medium"
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-muted-bg hover:text-primary transition-colors font-medium text-sm lg:text-base"
                 >
                   マイページ
                 </Link>
@@ -93,20 +93,20 @@ export function Header() {
               <div className="hidden md:flex items-center gap-3">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-muted-bg rounded-full">
                   <UserIcon className="w-4 h-4 text-muted" />
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="text-sm lg:text-base font-medium text-gray-700">
                     {displayName || 'ユーザー'}
                   </span>
                 </div>
                 <button
                   onClick={handleSignOut}
-                  className="btn btn-ghost text-sm"
+                  className="btn btn-ghost text-sm lg:text-base"
                 >
                   <LogOut className="w-4 h-4" />
                   ログアウト
                 </button>
               </div>
             ) : (
-              <Link href="/login" className="hidden md:block btn btn-primary">
+              <Link href="/login" className="hidden md:block btn btn-primary text-sm lg:text-base">
                 ログイン
               </Link>
             )}

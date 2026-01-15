@@ -3,7 +3,7 @@ import { EventCard } from '@/components/events/EventCard'
 import { EventFilter } from '@/components/events/EventFilter'
 import { Suspense } from 'react'
 import { Calendar, Sparkles } from 'lucide-react'
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, parseISO } from 'date-fns'
+import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, parseISO } from 'date-fns'
 
 // トップページ用JSON-LD構造化データ
 function WebsiteJsonLd() {
@@ -87,6 +87,10 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
     } else if (params.date === 'month') {
       startDate = startOfMonth(now)
       endDate = endOfMonth(now)
+    } else if (params.date === 'nextMonth') {
+      const nextMonth = addMonths(now, 1)
+      startDate = startOfMonth(nextMonth)
+      endDate = endOfMonth(nextMonth)
     } else {
       // Specific date
       startDate = startOfDay(parseISO(params.date))
@@ -151,7 +155,7 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
   )
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {eventsWithCounts.map((event, index) => (
         <div key={event.id} className={`animate-fade-in stagger-${Math.min(index + 1, 5)}`}>
           <EventCard
@@ -182,18 +186,18 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
       <WebsiteJsonLd />
       <div>
       {/* Hero Section */}
-      <section className="text-center mb-12 animate-fade-in">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-4">
-          <Sparkles className="w-4 h-4" />
+      <section className="text-center mb-12 md:mb-16 lg:mb-20 animate-fade-in max-w-4xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm md:text-base mb-4 md:mb-6">
+          <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
           宮城県のバドミントン練習会
         </div>
-        <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+        <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6 leading-tight">
           ビジターとして
           <br className="md:hidden" />
           <span className="text-primary">気軽に参加</span>
           しよう
         </h1>
-        <p className="text-base md:text-lg text-muted max-w-2xl mx-auto px-2">
+        <p className="text-base md:text-lg lg:text-xl text-muted max-w-2xl mx-auto px-2 md:px-4">
           宮城県内のバドミントン練習会を探して、ビジターとして参加できます。
           <br className="hidden md:block" />
           初心者から上級者まで、あなたにぴったりの練習会がきっと見つかります。
@@ -207,8 +211,8 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
 
       {/* Event List */}
       <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">
             開催予定の練習会
           </h2>
         </div>
