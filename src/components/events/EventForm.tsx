@@ -5,13 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { LEVELS, MIYAGI_CITIES, LevelKey } from "@/lib/constants";
 import { format } from "date-fns";
-import {
-  Calendar,
-  MapPin,
-  Users,
-  FileText,
-  AlertCircle,
-} from "lucide-react";
+import { Calendar, MapPin, Users, FileText, AlertCircle } from "lucide-react";
 
 type EventFormData = {
   title: string;
@@ -21,6 +15,7 @@ type EventFormData = {
   address: string;
   city: string;
   level: LevelKey;
+  level_notes: string;
   fee: number;
   visitor_capacity: number;
   description: string;
@@ -44,6 +39,7 @@ const defaultFormData: EventFormData = {
   address: "",
   city: "",
   level: "all",
+  level_notes: "",
   fee: 500,
   visitor_capacity: 2,
   description: "",
@@ -230,6 +226,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       address: formData.address.trim(),
       city: formData.city,
       level: formData.level,
+      level_notes: formData.level_notes.trim() || null,
       fee: formData.fee,
       visitor_capacity: formData.visitor_capacity,
       description: formData.description.trim(),
@@ -337,9 +334,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                     : ""
                 }
                 onChange={handleChange}
-                className={`input w-full ${
-                  errors.end_at ? "input-error" : ""
-                }`}
+                className={`input w-full ${errors.end_at ? "input-error" : ""}`}
               />
               {errors.end_at && (
                 <p className="text-sm text-error mt-1">{errors.end_at}</p>
@@ -495,8 +490,14 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                   type="number"
                   min="0"
                   step="100"
-                  value={formData.fee}
+                  value={formData.fee || ""}
                   onChange={handleChange}
+                  onBlur={(e) => {
+                    const value = Number(e.target.value);
+                    if (isNaN(value) || e.target.value === "") {
+                      setFormData((prev) => ({ ...prev, fee: 0 }));
+                    }
+                  }}
                   className={`input pl-10 ${errors.fee ? "input-error" : ""}`}
                 />
               </div>
@@ -528,6 +529,24 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 </p>
               )}
             </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="level_notes"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              レベル補足情報（任意）
+            </label>
+            <textarea
+              id="level_notes"
+              name="level_notes"
+              value={formData.level_notes}
+              onChange={handleChange}
+              rows={2}
+              placeholder="例：初心者多めです、仙台市2部くらい"
+              className="input resize-none"
+            />
           </div>
 
           <div>

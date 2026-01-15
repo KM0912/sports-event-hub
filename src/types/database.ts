@@ -131,6 +131,7 @@ export type Database = {
           host_user_id: string
           id: string
           level: string
+          level_notes: string | null
           notes: string | null
           participation_rules: string
           start_at: string
@@ -153,6 +154,7 @@ export type Database = {
           host_user_id: string
           id?: string
           level: string
+          level_notes?: string | null
           notes?: string | null
           participation_rules: string
           start_at: string
@@ -175,6 +177,7 @@ export type Database = {
           host_user_id?: string
           id?: string
           level?: string
+          level_notes?: string | null
           notes?: string | null
           participation_rules?: string
           start_at?: string
@@ -307,6 +310,7 @@ export type Database = {
           host_user_id: string | null
           id: string | null
           level: string | null
+          level_notes: string | null
           notes: string | null
           participation_rules: string | null
           remaining_spots: number | null

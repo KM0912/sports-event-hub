@@ -270,6 +270,11 @@ export default async function EventDetailPage({ params }: PageProps) {
                 {LEVELS[event.level as LevelKey] || event.level}
               </span>
             </div>
+            {event.level_notes && (
+              <p className="text-sm text-gray-600 mb-3 pl-1">
+                {event.level_notes}
+              </p>
+            )}
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               {event.title}
             </h1>

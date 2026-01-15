@@ -38,6 +38,7 @@ export default async function EditEventPage({ params }: PageProps) {
     address: event.address,
     city: event.city,
     level: event.level as 'beginner' | 'novice' | 'intermediate' | 'advanced' | 'all',
+    level_notes: event.level_notes || '',
     fee: event.fee,
     visitor_capacity: event.visitor_capacity,
     description: event.description,
