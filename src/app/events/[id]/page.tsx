@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import { formatInTimeZone } from "date-fns-tz";
 import { LEVELS, LevelKey, EVENT_STATUS } from "@/lib/constants";
 import { ApplyButton } from "@/components/applications/ApplyButton";
 import {
@@ -45,9 +46,12 @@ export async function generateMetadata({
 
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "https://miyagi-badminton.jp";
-  const eventDate = format(new Date(event.start_at!), "yyyy年M月d日", {
-    locale: ja,
-  });
+  const eventDate = formatInTimeZone(
+    new Date(event.start_at!),
+    "Asia/Tokyo",
+    "yyyy年M月d日",
+    { locale: ja }
+  );
   const levelText = LEVELS[event.level as LevelKey] || event.level;
 
   const title = `${event.title} - ${eventDate}`;
@@ -294,14 +298,27 @@ export default async function EventDetailPage({ params }: PageProps) {
               <div className="flex-1">
                 <p className="text-sm md:text-base text-muted mb-1">日時</p>
                 <p className="font-medium text-base md:text-lg text-gray-900">
-                  {format(new Date(event.start_at!), "yyyy年M月d日(E)", {
-                    locale: ja,
-                  })}
+                  {formatInTimeZone(
+                    new Date(event.start_at!),
+                    "Asia/Tokyo",
+                    "yyyy年M月d日(E)",
+                    { locale: ja }
+                  )}
                 </p>
                 <p className="text-gray-700 text-sm md:text-base">
-                  {format(new Date(event.start_at!), "HH:mm", { locale: ja })}
+                  {formatInTimeZone(
+                    new Date(event.start_at!),
+                    "Asia/Tokyo",
+                    "HH:mm",
+                    { locale: ja }
+                  )}
                   {" 〜 "}
-                  {format(new Date(event.end_at!), "HH:mm", { locale: ja })}
+                  {formatInTimeZone(
+                    new Date(event.end_at!),
+                    "Asia/Tokyo",
+                    "HH:mm",
+                    { locale: ja }
+                  )}
                 </p>
               </div>
             </div>
@@ -313,8 +330,12 @@ export default async function EventDetailPage({ params }: PageProps) {
               </div>
               <div className="flex-1">
                 <p className="text-sm md:text-base text-muted mb-1">場所</p>
-                <p className="font-medium text-base md:text-lg text-gray-900">{event.venue_name}</p>
-                <p className="text-gray-700 text-sm md:text-base">{event.address}</p>
+                <p className="font-medium text-base md:text-lg text-gray-900">
+                  {event.venue_name}
+                </p>
+                <p className="text-gray-700 text-sm md:text-base">
+                  {event.address}
+                </p>
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                     event.address!
@@ -348,7 +369,9 @@ export default async function EventDetailPage({ params }: PageProps) {
                 <Users className="w-6 h-6 md:w-5 md:h-5 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-sm md:text-base text-muted mb-1">ビジター枠</p>
+                <p className="text-sm md:text-base text-muted mb-1">
+                  ビジター枠
+                </p>
                 <p className="font-medium text-base md:text-lg text-gray-900">
                   残り{event.remaining_spots}人
                   <span className="text-muted font-normal text-sm md:text-base">
@@ -365,10 +388,13 @@ export default async function EventDetailPage({ params }: PageProps) {
                   <Clock className="w-6 h-6 md:w-5 md:h-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm md:text-base text-muted mb-1">募集締切</p>
+                  <p className="text-sm md:text-base text-muted mb-1">
+                    募集締切
+                  </p>
                   <p className="font-medium text-base md:text-lg text-gray-900">
-                    {format(
+                    {formatInTimeZone(
                       new Date(event.application_deadline),
+                      "Asia/Tokyo",
                       "M月d日(E) HH:mm",
                       { locale: ja }
                     )}
@@ -430,7 +456,10 @@ export default async function EventDetailPage({ params }: PageProps) {
           <div className="mt-8 pt-6 border-t border-border md:static sticky bottom-0 bg-white/95 backdrop-blur-sm pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 md:bg-transparent shadow-lg md:shadow-none">
             {isHost ? (
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link href={`/events/${id}/edit`} className="btn btn-secondary text-base min-h-[48px] md:min-h-[44px]">
+                <Link
+                  href={`/events/${id}/edit`}
+                  className="btn btn-secondary text-base min-h-[48px] md:min-h-[44px]"
+                >
                   編集する
                 </Link>
                 <Link

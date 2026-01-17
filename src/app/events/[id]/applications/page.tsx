@@ -1,63 +1,82 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
-import { format } from 'date-fns'
-import { ja } from 'date-fns/locale'
-import { APPLICATION_STATUS } from '@/lib/constants'
-import { ApplicationActions } from '@/components/applications/ApplicationActions'
-import { ArrowLeft, Calendar, Users, CheckCircle, Clock, XCircle, Ban } from 'lucide-react'
-import clsx from 'clsx'
+import { createClient } from "@/lib/supabase/server";
+import { redirect, notFound } from "next/navigation";
+import Link from "next/link";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
+import { formatInTimeZone } from "date-fns-tz";
+import { APPLICATION_STATUS } from "@/lib/constants";
+import { ApplicationActions } from "@/components/applications/ApplicationActions";
+import {
+  ArrowLeft,
+  Calendar,
+  Users,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Ban,
+} from "lucide-react";
+import clsx from "clsx";
 
 type PageProps = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
 export default async function ApplicationsPage({ params }: PageProps) {
-  const { id } = await params
-  const supabase = await createClient()
+  const { id } = await params;
+  const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
-    redirect(`/login?redirectTo=/events/${id}/applications`)
+    redirect(`/login?redirectTo=/events/${id}/applications`);
   }
 
   // Get event
   const { data: event, error } = await supabase
-    .from('events')
-    .select('*')
-    .eq('id', id)
-    .eq('host_user_id', user.id)
-    .single()
+    .from("events")
+    .select("*")
+    .eq("id", id)
+    .eq("host_user_id", user.id)
+    .single();
 
   if (error || !event) {
-    notFound()
+    notFound();
   }
 
   // Get applications with user profiles
   const { data: applications } = await supabase
-    .from('applications')
-    .select(`
+    .from("applications")
+    .select(
+      `
       *,
       profiles:user_id(display_name)
-    `)
-    .eq('event_id', id)
-    .order('created_at', { ascending: false })
+    `
+    )
+    .eq("event_id", id)
+    .order("created_at", { ascending: false });
 
   // Get blocked users
   const { data: blockedUsers } = await supabase
-    .from('host_blocks')
-    .select('blocked_user_id')
-    .eq('host_user_id', user.id)
+    .from("host_blocks")
+    .select("blocked_user_id")
+    .eq("host_user_id", user.id);
 
-  const blockedUserIds = new Set(blockedUsers?.map(b => b.blocked_user_id) || [])
+  const blockedUserIds = new Set(
+    blockedUsers?.map((b) => b.blocked_user_id) || []
+  );
 
   // Get approved count
-  const approvedCount = applications?.filter(a => a.status === 'approved').length || 0
-  const remainingSpots = event.visitor_capacity - approvedCount
+  const approvedCount =
+    applications?.filter((a) => a.status === "approved").length || 0;
+  const remainingSpots = event.visitor_capacity - approvedCount;
 
-  const pendingApps = applications?.filter(a => a.status === 'pending') || []
-  const approvedApps = applications?.filter(a => a.status === 'approved') || []
-  const otherApps = applications?.filter(a => ['rejected', 'canceled'].includes(a.status)) || []
+  const pendingApps = applications?.filter((a) => a.status === "pending") || [];
+  const approvedApps =
+    applications?.filter((a) => a.status === "approved") || [];
+  const otherApps =
+    applications?.filter((a) => ["rejected", "canceled"].includes(a.status)) ||
+    [];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -79,15 +98,22 @@ export default async function ApplicationsPage({ params }: PageProps) {
             <div className="flex items-center gap-4 mt-2 text-sm text-muted">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {format(new Date(event.start_at), 'M月d日(E) HH:mm', { locale: ja })}
+                {formatInTimeZone(
+                  new Date(event.start_at),
+                  "Asia/Tokyo",
+                  "M月d日(E) HH:mm",
+                  { locale: ja }
+                )}
               </div>
               <div className="flex items-center gap-1">
                 <Users className="w-4 h-4" />
                 {approvedCount}/{event.visitor_capacity}人
-                <span className={clsx(
-                  'ml-1',
-                  remainingSpots > 0 ? 'text-success' : 'text-warning'
-                )}>
+                <span
+                  className={clsx(
+                    "ml-1",
+                    remainingSpots > 0 ? "text-success" : "text-warning"
+                  )}
+                >
                   (残り{remainingSpots}枠)
                 </span>
               </div>
@@ -105,7 +131,7 @@ export default async function ApplicationsPage({ params }: PageProps) {
             <span className="badge badge-warning">{pendingApps.length}</span>
           )}
         </h2>
-        
+
         {pendingApps.length === 0 ? (
           <div className="card text-center py-8 text-muted">
             現在申請待ちはありません
@@ -118,14 +144,20 @@ export default async function ApplicationsPage({ params }: PageProps) {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-medium text-gray-900">
-                        {(app.profiles as { display_name: string })?.display_name || '名前なし'}
+                        {(app.profiles as { display_name: string })
+                          ?.display_name || "名前なし"}
                       </span>
                       {blockedUserIds.has(app.user_id) && (
-                        <span className="badge badge-error text-xs">ブロック中</span>
+                        <span className="badge badge-error text-xs">
+                          ブロック中
+                        </span>
                       )}
                     </div>
                     <p className="text-sm text-muted">
-                      申請日: {format(new Date(app.created_at), 'M/d HH:mm', { locale: ja })}
+                      申請日:{" "}
+                      {format(new Date(app.created_at), "M/d HH:mm", {
+                        locale: ja,
+                      })}
                     </p>
                     {app.comment && (
                       <p className="mt-2 text-sm text-gray-700 bg-muted-bg p-2 rounded">
@@ -155,7 +187,7 @@ export default async function ApplicationsPage({ params }: PageProps) {
             <span className="badge badge-success">{approvedApps.length}</span>
           )}
         </h2>
-        
+
         {approvedApps.length === 0 ? (
           <div className="card text-center py-8 text-muted">
             まだ承認済みの参加者はいません
@@ -164,10 +196,14 @@ export default async function ApplicationsPage({ params }: PageProps) {
           <div className="card">
             <div className="divide-y divide-border">
               {approvedApps.map((app) => (
-                <div key={app.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between">
+                <div
+                  key={app.id}
+                  className="py-3 first:pt-0 last:pb-0 flex items-center justify-between"
+                >
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-gray-900">
-                      {(app.profiles as { display_name: string })?.display_name || '名前なし'}
+                      {(app.profiles as { display_name: string })
+                        ?.display_name || "名前なし"}
                     </span>
                   </div>
                   <Link
@@ -193,12 +229,22 @@ export default async function ApplicationsPage({ params }: PageProps) {
           <div className="card">
             <div className="divide-y divide-border">
               {otherApps.map((app) => (
-                <div key={app.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between text-muted">
+                <div
+                  key={app.id}
+                  className="py-3 first:pt-0 last:pb-0 flex items-center justify-between text-muted"
+                >
                   <div>
-                    <span>{(app.profiles as { display_name: string })?.display_name || '名前なし'}</span>
+                    <span>
+                      {(app.profiles as { display_name: string })
+                        ?.display_name || "名前なし"}
+                    </span>
                     <span className="mx-2">·</span>
                     <span className="badge badge-muted text-xs">
-                      {APPLICATION_STATUS[app.status as keyof typeof APPLICATION_STATUS]}
+                      {
+                        APPLICATION_STATUS[
+                          app.status as keyof typeof APPLICATION_STATUS
+                        ]
+                      }
                     </span>
                   </div>
                 </div>
@@ -208,5 +254,5 @@ export default async function ApplicationsPage({ params }: PageProps) {
         </section>
       )}
     </div>
-  )
+  );
 }

@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import { formatInTimeZone } from "date-fns-tz";
 import { LEVELS, LevelKey } from "@/lib/constants";
 
 export const runtime = "edge";
@@ -49,13 +50,17 @@ export default async function Image({
     );
   }
 
-  const eventDate = format(new Date(event.start_at!), "M月d日(E)", {
-    locale: ja,
-  });
-  const eventTime = `${format(new Date(event.start_at!), "HH:mm")} - ${format(
-    new Date(event.end_at!),
+  const eventDate = formatInTimeZone(
+    new Date(event.start_at!),
+    "Asia/Tokyo",
+    "M月d日(E)",
+    { locale: ja }
+  );
+  const eventTime = `${formatInTimeZone(
+    new Date(event.start_at!),
+    "Asia/Tokyo",
     "HH:mm"
-  )}`;
+  )} - ${formatInTimeZone(new Date(event.end_at!), "Asia/Tokyo", "HH:mm")}`;
   const levelText = LEVELS[event.level as LevelKey] || event.level;
   const isFull = (event.remaining_spots ?? 0) <= 0;
   const isCanceled = event.status === "canceled";

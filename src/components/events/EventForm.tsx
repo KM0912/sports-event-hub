@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { LEVELS, MIYAGI_CITIES, LevelKey } from "@/lib/constants";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { Calendar, MapPin, Users, FileText, AlertCircle } from "lucide-react";
 
 type EventFormData = {
@@ -61,6 +61,22 @@ export function EventForm({ initialData, mode }: EventFormProps) {
   const router = useRouter();
   const supabase = createClient();
 
+  // Convert datetime-local format (JST) to ISO string (UTC)
+  // datetime-local format: "yyyy-MM-ddTHH:mm" is treated as JST (UTC+9)
+  const convertJSTToUTC = (dateStr: string): string => {
+    if (!dateStr) return dateStr;
+    // If already ISO format (contains 'Z' or has timezone), return as is
+    if (
+      dateStr.includes("Z") ||
+      dateStr.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+    ) {
+      return dateStr;
+    }
+    // datetime-local format: "yyyy-MM-ddTHH:mm" -> treat as JST and convert to UTC
+    // JST is UTC+9, so we add +09:00 to the string and then convert to UTC
+    return new Date(dateStr + ":00+09:00").toISOString();
+  };
+
   // Initialize deadline_hours_before from existing application_deadline and start_at
   useEffect(() => {
     if (initialData?.application_deadline && initialData?.start_at) {
@@ -100,12 +116,8 @@ export function EventForm({ initialData, mode }: EventFormProps) {
         const newData = { ...prev, deadline_hours_before: value };
         // Calculate application_deadline based on start_at and hours before
         if (value && prev.start_at) {
-          // start_at might be ISO string or datetime-local format
-          const startDateStr =
-            prev.start_at.includes("T") && prev.start_at.length === 16
-              ? prev.start_at + ":00"
-              : prev.start_at;
-          const startDate = new Date(startDateStr);
+          // start_at is already in ISO format (UTC) from previous conversion
+          const startDate = new Date(prev.start_at);
           const hoursBefore = parseInt(value, 10);
           const deadlineDate = new Date(
             startDate.getTime() - hoursBefore * 60 * 60 * 1000
@@ -120,8 +132,8 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       // Convert datetime-local format to ISO string for start_at and end_at
       let processedValue: string | number = value;
       if ((name === "start_at" || name === "end_at") && value) {
-        // datetime-local format: "yyyy-MM-ddTHH:mm" -> convert to ISO string
-        processedValue = new Date(value + ":00").toISOString();
+        // datetime-local format: "yyyy-MM-ddTHH:mm" -> treat as JST and convert to UTC
+        processedValue = convertJSTToUTC(value);
       } else if (name === "fee" || name === "visitor_capacity") {
         processedValue = Number(value);
       }
@@ -200,27 +212,16 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       return;
     }
 
-    // Convert datetime-local format to ISO string if needed
-    const convertToISO = (dateStr: string): string => {
-      if (!dateStr) return dateStr;
-      // If already ISO format (contains 'Z' or has timezone), return as is
-      if (
-        dateStr.includes("Z") ||
-        dateStr.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
-      ) {
-        return dateStr;
-      }
-      // datetime-local format: "yyyy-MM-ddTHH:mm"
-      return new Date(dateStr + ":00").toISOString();
-    };
+    // convertToISO is now replaced by convertJSTToUTC defined above
 
     const eventData = {
       host_user_id: user.id,
       title: formData.title.trim(),
-      start_at: convertToISO(formData.start_at),
-      end_at: convertToISO(formData.end_at),
+      start_at: convertJSTToUTC(formData.start_at),
+      end_at: convertJSTToUTC(formData.end_at),
       chat_expires_at: new Date(
-        new Date(convertToISO(formData.end_at)).getTime() + 48 * 60 * 60 * 1000
+        new Date(convertJSTToUTC(formData.end_at)).getTime() +
+          48 * 60 * 60 * 1000
       ).toISOString(),
       venue_name: formData.venue_name.trim(),
       address: formData.address.trim(),
@@ -234,7 +235,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       equipment: formData.equipment.trim() || null,
       notes: formData.notes.trim() || null,
       application_deadline: formData.application_deadline
-        ? convertToISO(formData.application_deadline)
+        ? convertJSTToUTC(formData.application_deadline)
         : null,
     };
 
@@ -305,7 +306,11 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 type="datetime-local"
                 value={
                   formData.start_at
-                    ? format(new Date(formData.start_at), "yyyy-MM-dd'T'HH:mm")
+                    ? formatInTimeZone(
+                        new Date(formData.start_at),
+                        "Asia/Tokyo",
+                        "yyyy-MM-dd'T'HH:mm"
+                      )
                     : ""
                 }
                 onChange={handleChange}
@@ -330,7 +335,11 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 type="datetime-local"
                 value={
                   formData.end_at
-                    ? format(new Date(formData.end_at), "yyyy-MM-dd'T'HH:mm")
+                    ? formatInTimeZone(
+                        new Date(formData.end_at),
+                        "Asia/Tokyo",
+                        "yyyy-MM-dd'T'HH:mm"
+                      )
                     : ""
                 }
                 onChange={handleChange}
