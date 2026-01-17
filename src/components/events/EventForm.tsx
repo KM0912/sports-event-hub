@@ -293,7 +293,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            <div className="min-w-0 w-full flex-1">
+            <div className="min-w-0 w-full">
               <label
                 htmlFor="start_at"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -322,7 +322,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
                 <p className="text-sm text-error mt-1">{errors.start_at}</p>
               )}
             </div>
-            <div className="min-w-0 w-full flex-1">
+            <div className="min-w-0 w-full">
               <label
                 htmlFor="end_at"
                 className="block text-sm font-medium text-gray-700 mb-1"
