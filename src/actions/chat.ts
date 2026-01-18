@@ -93,3 +93,36 @@ export async function sendChatMessage(
   revalidatePath(`/events/${conversation.event_id}/chat`)
   return { success: true }
 }
+
+// 会話を既読にする
+export async function markConversationAsRead(
+  conversationId: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return { success: false, error: 'Unauthorized' }
+  }
+
+  // upsertで既読情報を更新または作成
+  const { error } = await supabase.from('conversation_reads').upsert(
+    {
+      conversation_id: conversationId,
+      user_id: user.id,
+      last_read_at: new Date().toISOString(),
+    },
+    {
+      onConflict: 'conversation_id,user_id',
+    }
+  )
+
+  if (error) {
+    console.error('Error marking conversation as read:', error)
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}

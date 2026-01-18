@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
 import { Menu, X, User as UserIcon, LogOut, Calendar, LayoutDashboard, ChevronRight } from 'lucide-react'
+import { NotificationBadge, NotificationDot } from './NotificationBadge'
 
 export function Header() {
   const [user, setUser] = useState<User | null>(null)
@@ -90,11 +91,17 @@ export function Header() {
               </NavLink>
               {user && (
                 <>
-                  <NavLink href="/dashboard">
+                  <NavLink
+                    href="/dashboard"
+                    badge={<NotificationBadge type="pending-applications" userId={user.id} />}
+                  >
                     <LayoutDashboard className="w-4 h-4" />
                     主催者ダッシュボード
                   </NavLink>
-                  <NavLink href="/mypage">
+                  <NavLink
+                    href="/mypage"
+                    badge={<NotificationBadge type="unread-chats" userId={user.id} />}
+                  >
                     <UserIcon className="w-4 h-4" />
                     マイページ
                   </NavLink>
@@ -129,7 +136,7 @@ export function Header() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="md:hidden relative p-2 rounded-lg hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="メニューを開く"
               >
                 {isMenuOpen ? (
@@ -137,6 +144,7 @@ export function Header() {
                 ) : (
                   <Menu className="w-6 h-6 text-gray-700" />
                 )}
+                {user && !isMenuOpen && <NotificationDot userId={user.id} />}
               </button>
             </div>
           </div>
@@ -186,6 +194,7 @@ export function Header() {
               <MobileNavLink
                 href="/dashboard"
                 icon={<LayoutDashboard className="w-5 h-5" />}
+                badge={<NotificationBadge type="pending-applications" userId={user.id} />}
                 onClick={() => setIsMenuOpen(false)}
               >
                 主催者ダッシュボード
@@ -193,6 +202,7 @@ export function Header() {
               <MobileNavLink
                 href="/mypage"
                 icon={<UserIcon className="w-5 h-5" />}
+                badge={<NotificationBadge type="unread-chats" userId={user.id} />}
                 onClick={() => setIsMenuOpen(false)}
               >
                 マイページ
@@ -237,16 +247,19 @@ export function Header() {
 function NavLink({
   href,
   children,
+  badge,
 }: {
   href: string
   children: React.ReactNode
+  badge?: React.ReactNode
 }) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-primary/5 transition-colors font-medium text-sm"
+      className="relative flex items-center gap-2 px-4 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-primary/5 transition-colors font-medium text-sm"
     >
       {children}
+      {badge}
     </Link>
   )
 }
@@ -255,11 +268,13 @@ function MobileNavLink({
   href,
   children,
   icon,
+  badge,
   onClick,
 }: {
   href: string
   children: React.ReactNode
   icon?: React.ReactNode
+  badge?: React.ReactNode
   onClick?: () => void
 }) {
   return (
@@ -269,7 +284,10 @@ function MobileNavLink({
       onClick={onClick}
     >
       <span className="flex items-center gap-3">
-        <span className="text-primary">{icon}</span>
+        <span className="relative text-primary">
+          {icon}
+          {badge}
+        </span>
         {children}
       </span>
       <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />

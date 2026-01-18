@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useTransition } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { sendChatMessage } from '@/actions/chat'
+import { sendChatMessage, markConversationAsRead } from '@/actions/chat'
 import { QUICK_MESSAGES } from '@/lib/constants'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
@@ -49,6 +49,11 @@ export function ChatInterface({
     scrollToBottom()
   }, [messages])
 
+  // チャット画面を開いた時に自動で既読にする
+  useEffect(() => {
+    markConversationAsRead(conversationId)
+  }, [conversationId])
+
   // Subscribe to new messages
   useEffect(() => {
     const channel = supabase
@@ -78,6 +83,11 @@ export function ChatInterface({
           }
 
           setMessages((prev) => [...prev, newMsg])
+
+          // 相手からのメッセージを受信した場合、既読にする
+          if (payload.new.sender_user_id !== currentUserId) {
+            markConversationAsRead(conversationId)
+          }
         }
       )
       .subscribe()
