@@ -81,6 +81,67 @@ npx supabase start
 
 `.env.production` ファイルを作成し、本番環境用の値を設定してください。
 
+## サンプルデータの投入
+
+開発環境でサンプルデータを投入する方法は2つあります。
+
+### 方法1: TypeScript seedスクリプト（推奨）
+
+この方法では、テストユーザー、イベント、申請データなどを自動的に作成します。
+
+**前提条件:**
+- Supabaseローカル環境が起動している（`npx supabase start`）
+- または、リモートSupabaseプロジェクトのService Role Keyが必要
+
+**手順:**
+
+1. 環境変数を設定します（`.env.local`に追加）:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   ```
+
+   **ローカル開発環境の場合:**
+   - Service Role Keyは Supabase Studio (http://127.0.0.1:54323) の「Settings」→「API」→「service_role key」から取得できます
+   - ローカル環境のデフォルト値: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU`
+   - 注意: ローカル環境を再起動すると、Service Role Keyが変わる可能性があります
+
+   **リモートプロジェクトの場合:**
+   - Supabaseダッシュボードの「Settings」→「API」→「service_role key」から取得できます
+   - 注意: Service Role Keyは機密情報です。Gitにコミットしないでください
+
+2. seedスクリプトを実行:
+   ```bash
+   npm run seed
+   ```
+
+   **注意:** seedスクリプトは`.env.local`ファイルを自動的に読み込みます
+
+**作成されるデータ:**
+- テストユーザー4名:
+  - test1@example.com / password123 (テストユーザー1)
+  - test2@example.com / password123 (テストユーザー2)
+  - test3@example.com / password123 (テストユーザー3)
+  - test4@example.com / password123 (テストユーザー4)
+- イベント5件（初心者向け、中級者向け、上級者向け、全レベル、過去のイベント）
+- 申請データ（一部のイベントへの申請）
+
+### 方法2: SQL seedファイル
+
+Supabase CLIを使用している場合、`supabase db reset` を実行すると、マイグレーションと一緒に `supabase/seed.sql` が実行されます。
+
+**注意:** この方法は `auth.users` にユーザーが既に存在することを前提としています。
+
+**手順:**
+
+1. まず、アプリケーションまたはSupabase Studioでユーザーを作成します
+2. データベースをリセットしてseedデータを投入:
+   ```bash
+   npx supabase db reset
+   ```
+
+**注意:** `db reset` は既存のデータをすべて削除します。開発環境でのみ使用してください。
+
 ## Getting Started
 
 First, run the development server:
