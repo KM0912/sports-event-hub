@@ -14,5 +14,11 @@ export function getResend(): Resend {
   return resendClient
 }
 
-// 送信元アドレス（Resendで検証済みのドメイン）
-export const FROM_EMAIL = 'バドミントン練習会 <noreply@miyagi-badminton.jp>'
+// 送信元アドレス
+// 開発環境: Resendのテスト用アドレスを使用
+// 本番環境: 検証済みドメインを環境変数で設定
+export const FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL ||
+  (process.env.NODE_ENV === 'production'
+    ? 'バドミントン練習会 <noreply@miyagi-badminton.jp>'
+    : 'バドミントン練習会 <onboarding@resend.dev>')
