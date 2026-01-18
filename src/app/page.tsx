@@ -2,13 +2,14 @@ import { createClient } from '@/lib/supabase/server'
 import { EventCard } from '@/components/events/EventCard'
 import { EventFilter } from '@/components/events/EventFilter'
 import { Suspense } from 'react'
-import { Calendar, Sparkles } from 'lucide-react'
+import { Calendar, MapPin, Users, Trophy, ArrowRight } from 'lucide-react'
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, parseISO } from 'date-fns'
+import Link from 'next/link'
 
 // トップページ用JSON-LD構造化データ
 function WebsiteJsonLd() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://miyagi-badminton.jp'
-  
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -117,22 +118,31 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
   if (error) {
     console.error('Error fetching events:', error)
     return (
-      <div className="text-center py-12">
-        <p className="text-muted">イベントの取得に失敗しました</p>
+      <div className="text-center py-16">
+        <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+          <Calendar className="w-8 h-8 text-error" />
+        </div>
+        <p className="text-gray-600 text-lg">データの読み込みに失敗しました</p>
       </div>
     )
   }
 
   if (!events || events.length === 0) {
     return (
-      <div className="text-center py-12 card">
-        <Calendar className="w-12 h-12 mx-auto text-muted mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+      <div className="text-center py-16 card">
+        <div className="w-20 h-20 mx-auto mb-6 bg-primary-light rounded-full flex items-center justify-center">
+          <Calendar className="w-10 h-10 text-primary" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 mb-3">
           練習会が見つかりませんでした
         </h3>
-        <p className="text-muted">
-          条件を変更して再度検索してみてください
+        <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          現在、条件に合う練習会はありません。<br />
+          条件を変更して再度検索してみてください。
         </p>
+        <Link href="/" className="btn btn-secondary">
+          すべての練習会を見る
+        </Link>
       </div>
     )
   }
@@ -155,9 +165,9 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
   )
 
   return (
-    <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {eventsWithCounts.map((event, index) => (
-        <div key={event.id} className={`animate-fade-in stagger-${Math.min(index + 1, 5)}`}>
+        <div key={event.id} className={`animate-fade-in stagger-${Math.min(index + 1, 6)}`}>
           <EventCard
             event={{
               id: event.id,
@@ -184,52 +194,137 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
   return (
     <>
       <WebsiteJsonLd />
-      <div>
-      {/* Hero Section */}
-      <section className="text-center mb-12 md:mb-16 lg:mb-20 animate-fade-in max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm md:text-base mb-4 md:mb-6">
-          <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
-          宮城県のバドミントン練習会
-        </div>
-        <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6 leading-tight">
-          ビジターとして
-          <br className="md:hidden" />
-          <span className="text-primary">気軽に参加</span>
-          しよう
-        </h1>
-        <p className="text-base md:text-lg lg:text-xl text-muted max-w-xl md:max-w-2xl mx-auto px-2 md:px-4 leading-relaxed">
-          宮城県内のバドミントン練習会を探して、<br className="hidden md:inline" />
-          ビジターとして参加できます。<br className="hidden md:inline" />
-          初心者から上級者まで、<br className="hidden md:inline" />
-          あなたにぴったりの練習会がきっと見つかります。
-        </p>
-      </section>
-
-      {/* Filter Section */}
-      <Suspense fallback={<div className="card animate-pulse h-32" />}>
-        <EventFilter />
-      </Suspense>
-
-      {/* Event List */}
-      <section>
-        <div className="flex items-center justify-between mb-6 md:mb-8">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">
-            開催予定の練習会
-          </h2>
-        </div>
-        <Suspense
-          fallback={
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="card animate-pulse h-64" />
-              ))}
+      <div className="space-y-10 md:space-y-14">
+        {/* Hero Section */}
+        <section className="relative py-8 md:py-12">
+          <div className="text-center max-w-4xl mx-auto animate-fade-in">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-primary-light rounded-full mb-6">
+              <span className="text-2xl">🏸</span>
+              <span className="font-bold text-primary text-sm">
+                宮城バドミントン練習会
+              </span>
             </div>
-          }
-        >
-          <EventList searchParams={props.searchParams} />
-        </Suspense>
-      </section>
-    </div>
+
+            {/* Main heading */}
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              <span className="block">ビジターとして</span>
+              <span className="block mt-1">
+                <span className="text-primary">気軽に参加</span>
+                <span>しよう</span>
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed px-4">
+              宮城県内のバドミントン練習会を探して、
+              ビジターとして気軽に参加できます。
+              <span className="text-primary font-semibold">初心者から上級者まで</span>、
+              あなたにぴったりの練習会が見つかります。
+            </p>
+
+            {/* Feature badges */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8 px-4">
+              <FeatureBadge icon={<MapPin className="w-4 h-4" />} text="宮城県全域" color="primary" />
+              <FeatureBadge icon={<Users className="w-4 h-4" />} text="初心者歓迎" color="accent" />
+              <FeatureBadge icon={<Trophy className="w-4 h-4" />} text="全レベル対応" color="secondary" />
+            </div>
+
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a href="#events" className="btn btn-primary text-base px-8 group">
+                練習会を探す
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+              <Link href="/login" className="btn btn-secondary text-base px-8">
+                主催者として登録
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Filter Section */}
+        <section id="events" className="scroll-mt-24">
+          <Suspense fallback={<FilterSkeleton />}>
+            <EventFilter />
+          </Suspense>
+        </section>
+
+        {/* Event List */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                開催予定の練習会
+              </h2>
+              <p className="text-gray-500 text-sm">
+                参加したい練習会を見つけて申し込もう
+              </p>
+            </div>
+          </div>
+          <Suspense fallback={<EventListSkeleton />}>
+            <EventList searchParams={props.searchParams} />
+          </Suspense>
+        </section>
+      </div>
     </>
+  )
+}
+
+// Feature badge component
+function FeatureBadge({ icon, text, color }: { icon: React.ReactNode; text: string; color: 'primary' | 'secondary' | 'accent' }) {
+  const colorClasses = {
+    primary: 'text-primary bg-primary-light',
+    secondary: 'text-secondary bg-secondary-light',
+    accent: 'text-accent bg-accent-light',
+  }
+
+  return (
+    <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${colorClasses[color]}`}>
+      {icon}
+      <span className="text-sm font-semibold">{text}</span>
+    </div>
+  )
+}
+
+// Skeleton components
+function FilterSkeleton() {
+  return (
+    <div className="card animate-pulse">
+      <div className="h-6 bg-gray-200 rounded w-40 mb-4" />
+      <div className="flex flex-wrap gap-3">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="h-10 bg-gray-200 rounded-lg w-24" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function EventListSkeleton() {
+  return (
+    <div className="grid gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {[1, 2, 3, 4, 5, 6].map(i => (
+        <div key={i} className="card animate-pulse">
+          <div className="h-1 bg-gray-200 rounded -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4" />
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-14 h-14 bg-gray-200 rounded-lg" />
+            <div className="flex-1 space-y-2">
+              <div className="h-5 bg-gray-200 rounded w-20" />
+              <div className="h-5 bg-gray-200 rounded w-16" />
+            </div>
+          </div>
+          <div className="h-6 bg-gray-200 rounded mb-4" />
+          <div className="space-y-2.5">
+            <div className="h-7 bg-gray-200 rounded" />
+            <div className="h-7 bg-gray-200 rounded" />
+            <div className="h-7 bg-gray-200 rounded w-3/4" />
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
