@@ -462,82 +462,26 @@ export function EventForm({ initialData, mode }: EventFormProps) {
           練習会詳細
         </h2>
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="min-w-0">
-              <label
-                htmlFor="level"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                レベル <span className="text-error">*</span>
-              </label>
-              <select
-                id="level"
-                name="level"
-                value={formData.level}
-                onChange={handleChange}
-                className="input"
-              >
-                {Object.entries(LEVELS).map(([key, label]) => (
-                  <option key={key} value={key}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="min-w-0">
-              <label
-                htmlFor="fee"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                参加費 <span className="text-error">*</span>
-              </label>
-              <div className="relative">
-                {/* <JapaneseYen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted pointer-events-none" /> */}
-                <input
-                  id="fee"
-                  name="fee"
-                  type="number"
-                  min="0"
-                  step="100"
-                  value={formData.fee || ""}
-                  onChange={handleChange}
-                  onBlur={(e) => {
-                    const value = Number(e.target.value);
-                    if (isNaN(value) || e.target.value === "") {
-                      setFormData((prev) => ({ ...prev, fee: 0 }));
-                    }
-                  }}
-                  className={`input pl-10 ${errors.fee ? "input-error" : ""}`}
-                />
-              </div>
-              {errors.fee && (
-                <p className="text-sm text-error mt-1">{errors.fee}</p>
-              )}
-            </div>
-            <div className="min-w-0">
-              <label
-                htmlFor="visitor_capacity"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                ビジター枠 <span className="text-error">*</span>
-              </label>
-              <input
-                id="visitor_capacity"
-                name="visitor_capacity"
-                type="number"
-                min="1"
-                value={formData.visitor_capacity}
-                onChange={handleChange}
-                className={`input ${
-                  errors.visitor_capacity ? "input-error" : ""
-                }`}
-              />
-              {errors.visitor_capacity && (
-                <p className="text-sm text-error mt-1">
-                  {errors.visitor_capacity}
-                </p>
-              )}
-            </div>
+          <div>
+            <label
+              htmlFor="level"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              レベル <span className="text-error">*</span>
+            </label>
+            <select
+              id="level"
+              name="level"
+              value={formData.level}
+              onChange={handleChange}
+              className="input"
+            >
+              {Object.entries(LEVELS).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -556,6 +500,70 @@ export function EventForm({ initialData, mode }: EventFormProps) {
               placeholder="例：初心者多めです、仙台市2部くらい"
               className="input resize-none"
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="min-w-0">
+              <label
+                htmlFor="fee"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                参加費 <span className="text-error">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  id="fee"
+                  name="fee"
+                  type="number"
+                  min="0"
+                  step="100"
+                  value={formData.fee || ""}
+                  onChange={handleChange}
+                  onBlur={(e) => {
+                    const value = Number(e.target.value);
+                    if (isNaN(value) || e.target.value === "") {
+                      setFormData((prev) => ({ ...prev, fee: 0 }));
+                    }
+                  }}
+                  className={`input pr-10 ${errors.fee ? "input-error" : ""}`}
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                  円
+                </span>
+              </div>
+              {errors.fee && (
+                <p className="text-sm text-error mt-1">{errors.fee}</p>
+              )}
+            </div>
+            <div className="min-w-0">
+              <label
+                htmlFor="visitor_capacity"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                ビジター枠 <span className="text-error">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  id="visitor_capacity"
+                  name="visitor_capacity"
+                  type="number"
+                  min="1"
+                  value={formData.visitor_capacity}
+                  onChange={handleChange}
+                  className={`input pr-10 ${
+                    errors.visitor_capacity ? "input-error" : ""
+                  }`}
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                  人
+                </span>
+              </div>
+              {errors.visitor_capacity && (
+                <p className="text-sm text-error mt-1">
+                  {errors.visitor_capacity}
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
