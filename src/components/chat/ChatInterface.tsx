@@ -67,6 +67,13 @@ export function ChatInterface({
           filter: `conversation_id=eq.${conversationId}`,
         },
         async (payload) => {
+          // 既に存在するメッセージは追加しない（重複防止）
+          setMessages((prev) => {
+            const exists = prev.some((msg) => msg.id === payload.new.id)
+            if (exists) return prev
+            return prev // 一時的に前の状態を返す（下で非同期処理後に更新）
+          })
+
           // Get the sender profile
           const { data: profile } = await supabase
             .from('profiles')
@@ -82,7 +89,25 @@ export function ChatInterface({
             profiles: profile,
           }
 
-          setMessages((prev) => [...prev, newMsg])
+          setMessages((current) => {
+            // 再度重複チェック
+            const alreadyExists = current.some((msg) => msg.id === newMsg.id)
+            if (alreadyExists) return current
+            
+            // 一時メッセージ（temp-で始まるID）を削除
+            // 同じ送信者で同じbodyのメッセージが来たら、一時メッセージを置き換える
+            const filtered = current.filter((msg) => {
+              // 一時メッセージで、同じ送信者・同じbodyの場合は削除
+              if (msg.id.startsWith('temp-') && 
+                  msg.sender_user_id === newMsg.sender_user_id &&
+                  msg.body === newMsg.body) {
+                return false
+              }
+              return true
+            })
+            
+            return [...filtered, newMsg]
+          })
 
           // 相手からのメッセージを受信した場合、既読にする
           if (payload.new.sender_user_id !== currentUserId) {
@@ -100,13 +125,33 @@ export function ChatInterface({
   const handleSendMessage = (messageText: string) => {
     if (!messageText.trim() || chatExpired || isBlocked) return
 
+    const messageBody = messageText.trim()
+    
+    // 楽観的更新：送信前にローカル状態にメッセージを追加
+    const tempId = `temp-${Date.now()}`
+    const optimisticMessage: Message = {
+      id: tempId,
+      sender_user_id: currentUserId,
+      body: messageBody,
+      created_at: new Date().toISOString(),
+      profiles: { display_name: '' }, // 自分のプロフィールは表示しないので空でOK
+    }
+
+    setMessages((prev) => [...prev, optimisticMessage])
+    setNewMessage('')
+    setShowQuickMessages(false)
+
     startTransition(async () => {
-      const result = await sendChatMessage(conversationId, messageText.trim())
+      const result = await sendChatMessage(conversationId, messageBody)
       if (result.error) {
         console.error('Error sending message:', result.error)
+        // エラー時は楽観的更新を元に戻す
+        setMessages((prev) => prev.filter((msg) => msg.id !== tempId))
+        setNewMessage(messageBody) // メッセージを復元
       }
-      setNewMessage('')
-      setShowQuickMessages(false)
+      // 成功時は一時メッセージを削除しない
+      // リアルタイム購読で実際のメッセージが来たら、一時メッセージは自動的に削除される
+      // （リアルタイム購読で同じbodyのメッセージが来たら、一時メッセージを削除する処理を追加）
     })
   }
 

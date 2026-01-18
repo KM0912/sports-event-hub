@@ -38,6 +38,7 @@ export function EventFilter() {
   const quickDateFilters = [
     { label: '今日', value: 'today' },
     { label: '今週', value: 'week' },
+    { label: '来週', value: 'nextWeek' },
     { label: '今月', value: 'month' },
     { label: '来月', value: 'nextMonth' },
   ]
@@ -114,16 +115,13 @@ export function EventFilter() {
                   </button>
                 ))}
               </div>
-              <div className="relative">
-                <input
-                  type="date"
-                  value={dateFilter && !['today', 'week', 'month', 'nextMonth'].includes(dateFilter) ? dateFilter : ''}
-                  onChange={(e) => setDateFilter(e.target.value)}
-                  className="input min-h-[44px] text-base w-full pl-11"
-                  placeholder="日付を選択"
-                />
-                <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-              </div>
+              <input
+                type="date"
+                value={dateFilter && !['today', 'week', 'nextWeek', 'month', 'nextMonth'].includes(dateFilter) ? dateFilter : ''}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="input min-h-[44px] text-base w-full"
+                placeholder="日付を選択"
+              />
             </div>
 
             {/* City and Level Filters */}
@@ -139,7 +137,7 @@ export function EventFilter() {
                     value={cityFilter}
                     onChange={(e) => setCityFilter(e.target.value)}
                     className={clsx(
-                      "input min-h-[44px] text-base w-full pl-11 pr-10 appearance-none cursor-pointer",
+                      "input min-h-[44px] text-base w-full pr-10 appearance-none cursor-pointer",
                       cityFilter && "border-accent"
                     )}
                   >
@@ -148,10 +146,6 @@ export function EventFilter() {
                       <option key={city} value={city}>{city}</option>
                     ))}
                   </select>
-                  <MapPin className={clsx(
-                    "absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none transition-colors",
-                    cityFilter ? "text-accent" : "text-gray-400"
-                  )} />
                   <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                 </div>
               </div>
@@ -167,7 +161,7 @@ export function EventFilter() {
                     value={levelFilter}
                     onChange={(e) => setLevelFilter(e.target.value)}
                     className={clsx(
-                      "input min-h-[44px] text-base w-full pl-11 pr-10 appearance-none cursor-pointer",
+                      "input min-h-[44px] text-base w-full pr-10 appearance-none cursor-pointer",
                       levelFilter && "border-secondary"
                     )}
                   >
@@ -176,10 +170,6 @@ export function EventFilter() {
                       <option key={key} value={key}>{label}</option>
                     ))}
                   </select>
-                  <Trophy className={clsx(
-                    "absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none transition-colors",
-                    levelFilter ? "text-secondary" : "text-gray-400"
-                  )} />
                   <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                 </div>
               </div>

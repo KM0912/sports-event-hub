@@ -3,7 +3,7 @@ import { EventCard } from '@/components/events/EventCard'
 import { EventFilter } from '@/components/events/EventFilter'
 import { Suspense } from 'react'
 import { Calendar, MapPin, Users, Trophy, ArrowRight } from 'lucide-react'
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, parseISO } from 'date-fns'
+import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, addDays, parseISO } from 'date-fns'
 import Link from 'next/link'
 
 // トップページ用JSON-LD構造化データ
@@ -85,6 +85,10 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
     } else if (params.date === 'week') {
       startDate = startOfWeek(now, { weekStartsOn: 1 })
       endDate = endOfWeek(now, { weekStartsOn: 1 })
+    } else if (params.date === 'nextWeek') {
+      const nextWeekStart = addDays(now, 7 - now.getDay() + 1) // Next Monday
+      startDate = startOfWeek(nextWeekStart, { weekStartsOn: 1 })
+      endDate = endOfWeek(nextWeekStart, { weekStartsOn: 1 })
     } else if (params.date === 'month') {
       startDate = startOfMonth(now)
       endDate = endOfMonth(now)
