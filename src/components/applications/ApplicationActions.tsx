@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { approveApplication, rejectApplication, rejectAndBlockUser } from '@/actions/applications'
 import { Check, X, Ban, MoreVertical } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -19,78 +19,53 @@ export function ApplicationActions({
   isBlocked,
   remainingSpots,
 }: ApplicationActionsProps) {
-  const [loading, setLoading] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [showBlockConfirm, setShowBlockConfirm] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
-  const supabase = createClient()
 
-  const handleApprove = async () => {
+  const handleApprove = () => {
     if (remainingSpots <= 0) return
-    setLoading(true)
-
-    const { error } = await supabase
-      .from('applications')
-      .update({ status: 'approved' })
-      .eq('id', applicationId)
-
-    if (error) {
-      console.error('Approve error:', error)
-    }
-
-    setLoading(false)
-    router.refresh()
+    startTransition(async () => {
+      const result = await approveApplication(applicationId)
+      if (result.error) {
+        console.error('Approve error:', result.error)
+      }
+      router.refresh()
+    })
   }
 
-  const handleReject = async () => {
-    setLoading(true)
-
-    const { error } = await supabase
-      .from('applications')
-      .update({ status: 'rejected' })
-      .eq('id', applicationId)
-
-    if (error) {
-      console.error('Reject error:', error)
-    }
-
-    setLoading(false)
-    setShowMenu(false)
-    router.refresh()
+  const handleReject = () => {
+    startTransition(async () => {
+      const result = await rejectApplication(applicationId)
+      if (result.error) {
+        console.error('Reject error:', result.error)
+      }
+      setShowMenu(false)
+      router.refresh()
+    })
   }
 
-  const handleBlock = async () => {
-    setLoading(true)
-
-    // Reject the application
-    await supabase
-      .from('applications')
-      .update({ status: 'rejected' })
-      .eq('id', applicationId)
-
-    // Block the user
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      await supabase.from('host_blocks').insert({
-        host_user_id: user.id,
-        blocked_user_id: userId,
-      })
-    }
-
-    setLoading(false)
-    setShowBlockConfirm(false)
-    setShowMenu(false)
-    router.refresh()
+  const handleBlock = () => {
+    startTransition(async () => {
+      const result = await rejectAndBlockUser(applicationId, userId)
+      if (result.error) {
+        console.error('Block error:', result.error)
+      }
+      setShowBlockConfirm(false)
+      setShowMenu(false)
+      router.refresh()
+    })
   }
 
   return (
     <div className="flex items-center gap-2">
       <button
         onClick={handleApprove}
-        disabled={loading || remainingSpots <= 0}
+        disabled={isPending || remainingSpots <= 0}
         className={clsx(
           'btn btn-primary text-sm',
-          (loading || remainingSpots <= 0) && 'opacity-50 cursor-not-allowed'
+          (isPending || remainingSpots <= 0) && 'opacity-50 cursor-not-allowed'
         )}
         title={remainingSpots <= 0 ? '枠がありません' : '承認'}
       >
@@ -99,7 +74,7 @@ export function ApplicationActions({
       </button>
       <button
         onClick={handleReject}
-        disabled={loading}
+        disabled={isPending}
         className="btn btn-ghost text-sm text-muted hover:text-error hover:bg-error/10"
       >
         <X className="w-4 h-4" />
@@ -159,11 +134,11 @@ export function ApplicationActions({
               </button>
               <button
                 onClick={handleBlock}
-                disabled={loading}
+                disabled={isPending}
                 className="btn btn-danger"
               >
                 <Ban className="w-4 h-4" />
-                {loading ? '処理中...' : '追加する'}
+                {isPending ? '処理中...' : '追加する'}
               </button>
             </div>
           </div>

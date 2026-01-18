@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { useState, useTransition } from 'react'
+import { cancelEvent } from '@/actions/events'
 import { AlertTriangle, X } from 'lucide-react'
 
 type CancelEventButtonProps = {
@@ -11,26 +10,16 @@ type CancelEventButtonProps = {
 
 export function CancelEventButton({ eventId }: CancelEventButtonProps) {
   const [showConfirm, setShowConfirm] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const supabase = createClient()
+  const [isPending, startTransition] = useTransition()
 
-  const handleCancel = async () => {
-    setLoading(true)
-
-    const { error } = await supabase
-      .from('events')
-      .update({ status: 'canceled' })
-      .eq('id', eventId)
-
-    if (error) {
-      console.error('Cancel error:', error)
-      setLoading(false)
-      return
-    }
-
-    router.push('/dashboard')
-    router.refresh()
+  const handleCancel = () => {
+    startTransition(async () => {
+      const result = await cancelEvent(eventId)
+      if (result?.error) {
+        console.error('Cancel error:', result.error)
+      }
+      // cancelEvent handles redirect to dashboard
+    })
   }
 
   return (
@@ -57,6 +46,7 @@ export function CancelEventButton({ eventId }: CancelEventButtonProps) {
                 <p className="text-muted mt-1">
                   中止すると、新規の参加申請を受け付けなくなります。
                   既存の申請者には「中止」と表示されます。
+                  <strong className="text-gray-900">承認済みの参加者全員にメールで通知されます。</strong>
                   この操作は取り消せません。
                 </p>
               </div>
@@ -70,10 +60,10 @@ export function CancelEventButton({ eventId }: CancelEventButtonProps) {
               </button>
               <button
                 onClick={handleCancel}
-                disabled={loading}
+                disabled={isPending}
                 className="btn btn-danger"
               >
-                {loading ? '処理中...' : '中止する'}
+                {isPending ? '処理中...' : '中止する'}
               </button>
             </div>
           </div>

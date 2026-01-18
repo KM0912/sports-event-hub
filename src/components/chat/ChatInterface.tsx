@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useRef, useEffect, useTransition } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { sendChatMessage } from '@/actions/chat'
 import { QUICK_MESSAGES } from '@/lib/constants'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
@@ -36,10 +36,9 @@ export function ChatInterface({
 }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [newMessage, setNewMessage] = useState('')
-  const [sending, setSending] = useState(false)
   const [showQuickMessages, setShowQuickMessages] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
   const supabase = createClient()
 
   const scrollToBottom = () => {
@@ -88,32 +87,26 @@ export function ChatInterface({
     }
   }, [conversationId, supabase])
 
-  const sendMessage = async (messageText: string) => {
+  const handleSendMessage = (messageText: string) => {
     if (!messageText.trim() || chatExpired || isBlocked) return
 
-    setSending(true)
-    const { error } = await supabase.from('messages').insert({
-      conversation_id: conversationId,
-      sender_user_id: currentUserId,
-      body: messageText.trim(),
+    startTransition(async () => {
+      const result = await sendChatMessage(conversationId, messageText.trim())
+      if (result.error) {
+        console.error('Error sending message:', result.error)
+      }
+      setNewMessage('')
+      setShowQuickMessages(false)
     })
-
-    if (error) {
-      console.error('Error sending message:', error)
-    }
-
-    setSending(false)
-    setNewMessage('')
-    setShowQuickMessages(false)
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    sendMessage(newMessage)
+    handleSendMessage(newMessage)
   }
 
   const handleQuickMessage = (message: string) => {
-    sendMessage(message)
+    handleSendMessage(message)
   }
 
   const canSend = !chatExpired && !isBlocked
@@ -196,7 +189,7 @@ export function ChatInterface({
             <button
               key={msg}
               onClick={() => handleQuickMessage(msg)}
-              disabled={sending}
+              disabled={isPending}
               className="px-3 py-1.5 text-sm bg-muted-bg rounded-full hover:bg-gray-200 transition-colors"
             >
               {msg}
@@ -231,7 +224,7 @@ export function ChatInterface({
           />
           <button
             type="submit"
-            disabled={!newMessage.trim() || sending}
+            disabled={!newMessage.trim() || isPending}
             className="btn btn-primary"
           >
             <Send className="w-4 h-4" />

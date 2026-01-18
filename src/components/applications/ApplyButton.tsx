@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { APPLICATION_STATUS } from '@/lib/constants'
+import { createApplication, cancelApplication } from '@/actions/applications'
 import { Send, Check, X, Clock, AlertCircle, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import clsx from 'clsx'
@@ -31,53 +30,36 @@ export function ApplyButton({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [comment, setComment] = useState('')
   const [agreedToRules, setAgreedToRules] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [cancelLoading, setCancelLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
-  const supabase = createClient()
 
-  const handleApply = async () => {
+  const handleApply = () => {
     if (!agreedToRules) return
 
-    setLoading(true)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      router.push(`/login?redirectTo=/events/${eventId}`)
-      return
-    }
+    startTransition(async () => {
+      const result = await createApplication(eventId, comment.trim() || null)
+      if (result.error) {
+        console.error('Application error:', result.error)
+        return
+      }
 
-    const { error } = await supabase.from('applications').insert({
-      event_id: eventId,
-      user_id: user.id,
-      comment: comment.trim() || null,
+      setIsModalOpen(false)
+      router.refresh()
     })
-
-    if (error) {
-      console.error('Application error:', error)
-      setLoading(false)
-      return
-    }
-
-    setIsModalOpen(false)
-    router.refresh()
   }
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     if (!existingApplication) return
 
-    setCancelLoading(true)
-    const { error } = await supabase
-      .from('applications')
-      .update({ status: 'canceled' })
-      .eq('id', existingApplication.id)
+    startTransition(async () => {
+      const result = await cancelApplication(existingApplication.id)
+      if (result.error) {
+        console.error('Cancel error:', result.error)
+        return
+      }
 
-    if (error) {
-      console.error('Cancel error:', error)
-      setCancelLoading(false)
-      return
-    }
-
-    router.refresh()
+      router.refresh()
+    })
   }
 
   // Not logged in
@@ -119,11 +101,11 @@ export function ApplyButton({
           </div>
           <button
             onClick={handleCancel}
-            disabled={cancelLoading}
+            disabled={isPending}
             className="btn btn-ghost text-error hover:bg-error/10 text-base min-h-[44px]"
           >
             <X className="w-5 h-5 md:w-4 md:h-4" />
-            {cancelLoading ? '処理中...' : '申請をキャンセル'}
+            {isPending ? '処理中...' : '申請をキャンセル'}
           </button>
         </div>
       )
@@ -149,11 +131,11 @@ export function ApplyButton({
             </Link>
             <button
               onClick={handleCancel}
-              disabled={cancelLoading}
+              disabled={isPending}
               className="btn btn-ghost text-error hover:bg-error/10 text-base min-h-[44px]"
             >
               <X className="w-5 h-5 md:w-4 md:h-4" />
-              {cancelLoading ? '処理中...' : '参加をキャンセル'}
+              {isPending ? '処理中...' : '参加をキャンセル'}
             </button>
           </div>
         </div>
@@ -264,14 +246,14 @@ export function ApplyButton({
               </button>
               <button
                 onClick={handleApply}
-                disabled={!agreedToRules || loading}
+                disabled={!agreedToRules || isPending}
                 className={clsx(
                   'btn btn-primary flex-1 text-base min-h-[44px]',
-                  (!agreedToRules || loading) && 'opacity-50 cursor-not-allowed'
+                  (!agreedToRules || isPending) && 'opacity-50 cursor-not-allowed'
                 )}
               >
                 <Send className="w-5 h-5 md:w-4 md:h-4" />
-                {loading ? '送信中...' : '申請する'}
+                {isPending ? '送信中...' : '申請する'}
               </button>
               </div>
             </div>
