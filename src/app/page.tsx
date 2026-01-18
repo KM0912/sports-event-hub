@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { EventCard } from '@/components/events/EventCard'
 import { EventFilter } from '@/components/events/EventFilter'
 import { Suspense } from 'react'
-import { Calendar, MapPin, Users, Trophy, ArrowRight } from 'lucide-react'
+import { Calendar, MapPin, Users, Trophy, Search, Plus } from 'lucide-react'
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addMonths, addDays, parseISO } from 'date-fns'
 import Link from 'next/link'
 
@@ -195,6 +195,12 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
 }
 
 export default async function HomePage(props: { searchParams: SearchParams }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  // ログイン済みの場合は /events/new へ、未ログインの場合は /login?redirectTo=/events/new へ
+  const createEventHref = user ? '/events/new' : '/login?redirectTo=/events/new'
+
   return (
     <>
       <WebsiteJsonLd />
@@ -236,12 +242,13 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
 
             {/* CTA buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a href="#events" className="btn btn-primary text-base px-8 group">
+              <a href="#events" className="btn btn-primary text-base px-8 min-w-[200px] justify-center">
+                <Search className="w-5 h-5" />
                 練習会を探す
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
-              <Link href="/login" className="btn btn-secondary text-base px-8">
-                主催者として登録
+              <Link href={createEventHref} className="btn btn-secondary text-base px-8 min-w-[200px] justify-center">
+                <Plus className="w-5 h-5" />
+                練習会を作る
               </Link>
             </div>
           </div>
