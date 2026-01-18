@@ -191,6 +191,12 @@ async function EventList({ searchParams }: { searchParams: SearchParams }) {
 }
 
 export default async function HomePage(props: { searchParams: SearchParams }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  // ログイン済みの場合は /events/new へ、未ログインの場合は /login?redirectTo=/events/new へ
+  const createEventHref = user ? '/events/new' : '/login?redirectTo=/events/new'
+
   return (
     <>
       <WebsiteJsonLd />
@@ -236,8 +242,8 @@ export default async function HomePage(props: { searchParams: SearchParams }) {
                 練習会を探す
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
-              <Link href="/login" className="btn btn-secondary text-base px-8">
-                主催者として登録
+              <Link href={createEventHref} className="btn btn-secondary text-base px-8">
+                練習会を作る
               </Link>
             </div>
           </div>
