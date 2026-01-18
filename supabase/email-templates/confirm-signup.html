@@ -1,0 +1,94 @@
+<!--
+  Supabase Email Template: Confirm Signup
+  Subject: 【バドミントン練習会】メールアドレスの確認
+
+  設定場所: Supabase Dashboard → Authentication → Email Templates → Confirm signup
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="background-color: #f6f9fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, sans-serif; margin: 0; padding: 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f6f9fc; padding: 20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; max-width: 600px;">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 20px 40px; border-bottom: 1px solid #e6e6e6;">
+              <a href="{{ .SiteURL }}" style="color: #10b981; font-size: 20px; font-weight: bold; text-decoration: none;">
+                バドミントン練習会
+              </a>
+            </td>
+          </tr>
+
+          <!-- Main Content -->
+          <tr>
+            <td style="padding: 40px;">
+              <h1 style="color: #1f2937; font-size: 24px; font-weight: bold; margin: 0 0 20px; padding: 0;">
+                メールアドレスの確認
+              </h1>
+
+              <p style="color: #374151; font-size: 16px; line-height: 24px; margin: 16px 0;">
+                バドミントン練習会へのご登録ありがとうございます。
+              </p>
+
+              <p style="color: #374151; font-size: 16px; line-height: 24px; margin: 16px 0;">
+                以下のボタンをクリックして、メールアドレスの確認を完了してください。
+              </p>
+
+              <!-- Button -->
+              <table cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+                <tr>
+                  <td>
+                    <a href="{{ .ConfirmationURL }}" style="background-color: #10b981; border-radius: 8px; color: #ffffff; display: inline-block; font-size: 16px; font-weight: bold; padding: 12px 24px; text-decoration: none; text-align: center;">
+                      メールアドレスを確認する
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color: #374151; font-size: 16px; line-height: 24px; margin: 16px 0;">
+                ボタンがクリックできない場合は、以下のURLをブラウザに貼り付けてください。
+              </p>
+
+              <p style="color: #6b7280; font-size: 14px; line-height: 20px; margin: 16px 0; word-break: break-all;">
+                {{ .ConfirmationURL }}
+              </p>
+
+              <!-- Info Box -->
+              <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 24px 0;">
+                <p style="color: #6b7280; font-size: 12px; font-weight: bold; text-transform: uppercase; margin: 0 0 4px;">
+                  登録メールアドレス
+                </p>
+                <p style="color: #1f2937; font-size: 16px; margin: 0;">
+                  {{ .Email }}
+                </p>
+              </div>
+
+              <p style="color: #6b7280; font-size: 14px; line-height: 20px; margin: 16px 0;">
+                ※このリンクは24時間有効です。<br>
+                ※心当たりがない場合は、このメールを無視してください。
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 20px 40px; border-top: 1px solid #e6e6e6;">
+              <p style="color: #6b7280; font-size: 12px; line-height: 16px; margin: 8px 0;">
+                このメールは <a href="{{ .SiteURL }}" style="color: #10b981; text-decoration: underline;">バドミントン練習会</a> から自動送信されています。
+              </p>
+              <p style="color: #6b7280; font-size: 12px; line-height: 16px; margin: 8px 0;">
+                ご不明な点がございましたら、サイト内のチャット機能よりお問い合わせください。
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
