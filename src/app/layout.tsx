@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
-import { PageTransitionLoader } from "@/components/layout/PageTransitionLoader";
+import { NavigationProvider } from "@/components/navigation/NavigationProvider";
 
 const siteName = "宮城バドミントン練習会";
 const siteDescription =
@@ -118,16 +118,17 @@ export default function RootLayout({
             </Script>
           </>
         )}
-        <PageTransitionLoader />
-        <Header />
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
-          {children}
-        </main>
-        <footer className="bg-white/80 backdrop-blur-sm border-t border-border py-6">
-          <div className="max-w-7xl mx-auto px-4 text-center text-muted text-sm">
-            <p>&copy; 2026 宮城バドミントン練習会. All rights reserved.</p>
-          </div>
-        </footer>
+        <NavigationProvider>
+          <Header />
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
+            {children}
+          </main>
+          <footer className="bg-white/80 backdrop-blur-sm border-t border-border py-6">
+            <div className="max-w-7xl mx-auto px-4 text-center text-muted text-sm">
+              <p>&copy; 2026 宮城バドミントン練習会. All rights reserved.</p>
+            </div>
+          </footer>
+        </NavigationProvider>
       </body>
     </html>
   );

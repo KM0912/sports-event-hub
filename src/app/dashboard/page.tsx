@@ -1,7 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { formatInTimeZone } from "date-fns-tz";
 import { EVENT_STATUS, LEVELS, LevelKey } from "@/lib/constants";
@@ -17,6 +15,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { Metadata } from "next";
+import { NavigationLink } from "@/components/navigation/NavigationLink";
 
 export const metadata: Metadata = {
   title: "主催者ダッシュボード",
@@ -91,13 +90,13 @@ export default async function DashboardPage() {
             練習会の管理・参加申請の確認
           </p>
         </div>
-        <Link
+        <NavigationLink
           href="/events/new"
           className="btn btn-primary w-full sm:w-auto text-base min-h-[48px] sm:min-h-[44px]"
         >
           <Plus className="w-5 h-5 md:w-4 md:h-4" />
           練習会を作成
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Upcoming Events */}
@@ -119,10 +118,10 @@ export default async function DashboardPage() {
             <p className="text-muted mb-4">
               新しい練習会を作成してビジターを募集しましょう
             </p>
-            <Link href="/events/new" className="btn btn-primary inline-flex">
+            <NavigationLink href="/events/new" className="btn btn-primary inline-flex">
               <Plus className="w-4 h-4" />
               練習会を作成
-            </Link>
+            </NavigationLink>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
@@ -180,21 +179,21 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <Link
+                    <NavigationLink
                       href={`/events/${event.id}`}
                       className="btn btn-ghost text-base min-h-[44px]"
                     >
                       <Eye className="w-5 h-5 md:w-4 md:h-4" />
                       詳細
-                    </Link>
-                    <Link
+                    </NavigationLink>
+                    <NavigationLink
                       href={`/events/${event.id}/edit`}
                       className="btn btn-ghost text-base min-h-[44px]"
                     >
                       <Edit className="w-5 h-5 md:w-4 md:h-4" />
                       編集
-                    </Link>
-                    <Link
+                    </NavigationLink>
+                    <NavigationLink
                       href={`/events/${event.id}/applications`}
                       className={clsx(
                         "btn text-base min-h-[44px]",
@@ -208,7 +207,7 @@ export default async function DashboardPage() {
                           ({event.pendingCount})
                         </span>
                       )}
-                    </Link>
+                    </NavigationLink>
                   </div>
                 </div>
               </div>
@@ -248,13 +247,13 @@ export default async function DashboardPage() {
                       参加者{event.approvedCount}人
                     </p>
                   </div>
-                  <Link
+                  <NavigationLink
                     href={`/events/${event.id}`}
                     className="btn btn-ghost text-sm"
                   >
                     <Eye className="w-4 h-4" />
                     詳細
-                  </Link>
+                  </NavigationLink>
                 </div>
               </div>
             ))}

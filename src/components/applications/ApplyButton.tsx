@@ -4,8 +4,8 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createApplication, cancelApplication } from '@/actions/applications'
 import { Send, Check, X, Clock, AlertCircle, MessageCircle } from 'lucide-react'
-import Link from 'next/link'
 import clsx from 'clsx'
+import { NavigationLink } from '@/components/navigation/NavigationLink'
 
 type ApplyButtonProps = {
   eventId: string
@@ -65,13 +65,13 @@ export function ApplyButton({
   // Not logged in
   if (!isLoggedIn) {
     return (
-      <Link
+      <NavigationLink
         href={`/login?redirectTo=/events/${eventId}`}
         className="btn btn-primary w-full md:w-auto text-base min-h-[48px] md:min-h-[44px]"
       >
         <Send className="w-5 h-5 md:w-4 md:h-4" />
         ログインして参加申請
-      </Link>
+      </NavigationLink>
     )
   }
 
@@ -122,13 +122,13 @@ export function ApplyButton({
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Link
+            <NavigationLink
               href={`/events/${eventId}/chat`}
               className="btn btn-secondary text-base min-h-[44px]"
             >
               <MessageCircle className="w-5 h-5 md:w-4 md:h-4" />
               主催者に連絡
-            </Link>
+            </NavigationLink>
             <button
               onClick={handleCancel}
               disabled={isPending}

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
 import { Menu, X, User as UserIcon, LogOut, Calendar, LayoutDashboard, ChevronRight } from 'lucide-react'
 import { NotificationBadge, NotificationDot } from './NotificationBadge'
+import { NavigationLink } from '@/components/navigation/NavigationLink'
 
 export function Header() {
   const [user, setUser] = useState<User | null>(null)
@@ -69,7 +70,7 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
+            <NavigationLink href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                 <span className="text-xl">🏸</span>
               </div>
@@ -81,7 +82,7 @@ export function Header() {
                   練習会プラットフォーム
                 </p>
               </div>
-            </Link>
+            </NavigationLink>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1">
@@ -128,9 +129,9 @@ export function Header() {
                   </button>
                 </div>
               ) : (
-                <Link href="/login" className="hidden md:flex btn btn-primary text-sm py-2">
+                <NavigationLink href="/login" className="hidden md:flex btn btn-primary text-sm py-2">
                   ログイン
-                </Link>
+                </NavigationLink>
               )}
 
               {/* Mobile Menu Button */}
@@ -229,13 +230,13 @@ export function Header() {
             </>
           ) : (
             <div className="mt-auto pt-4">
-              <Link
+              <NavigationLink
                 href="/login"
                 className="btn btn-primary w-full"
                 onClick={() => setIsMenuOpen(false)}
               >
                 ログイン
-              </Link>
+              </NavigationLink>
             </div>
           )}
         </nav>
@@ -254,13 +255,13 @@ function NavLink({
   badge?: React.ReactNode
 }) {
   return (
-    <Link
+    <NavigationLink
       href={href}
       className="relative flex items-center gap-2 px-4 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-primary/5 transition-colors font-medium text-sm"
     >
       {children}
       {badge}
-    </Link>
+    </NavigationLink>
   )
 }
 
@@ -278,7 +279,7 @@ function MobileNavLink({
   onClick?: () => void
 }) {
   return (
-    <Link
+    <NavigationLink
       href={href}
       className="flex items-center justify-between px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors min-h-[48px] text-sm font-medium group"
       onClick={onClick}
@@ -291,6 +292,6 @@ function MobileNavLink({
         {children}
       </span>
       <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
-    </Link>
+    </NavigationLink>
   )
 }

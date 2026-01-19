@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
-import Link from "next/link";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { formatInTimeZone } from "date-fns-tz";
@@ -16,6 +15,7 @@ import {
   Ban,
 } from "lucide-react";
 import clsx from "clsx";
+import { NavigationLink } from "@/components/navigation/NavigationLink";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -81,13 +81,13 @@ export default async function ApplicationsPage({ params }: PageProps) {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Breadcrumb */}
-      <Link
+      <NavigationLink
         href="/dashboard"
         className="inline-flex items-center gap-2 text-muted hover:text-primary mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         ダッシュボードに戻る
-      </Link>
+      </NavigationLink>
 
       {/* Header */}
       <div className="card mb-6">
@@ -206,12 +206,12 @@ export default async function ApplicationsPage({ params }: PageProps) {
                         ?.display_name || "名前なし"}
                     </span>
                   </div>
-                  <Link
+                  <NavigationLink
                     href={`/events/${id}/chat/${app.user_id}`}
                     className="text-sm text-primary hover:underline"
                   >
                     連絡する
-                  </Link>
+                  </NavigationLink>
                 </div>
               ))}
             </div>

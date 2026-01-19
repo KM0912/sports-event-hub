@@ -1,9 +1,11 @@
-import Link from "next/link";
+'use client'
+
 import { formatInTimeZone } from "date-fns-tz";
 import { ja } from "date-fns/locale";
 import { LEVELS, LevelKey, EVENT_STATUS } from "@/lib/constants";
 import { MapPin, Users, JapaneseYen, User, Clock } from "lucide-react";
 import clsx from "clsx";
+import { NavigationLink } from "@/components/navigation/NavigationLink";
 
 type EventCardProps = {
   event: {
@@ -56,7 +58,7 @@ export function EventCard({ event }: EventCardProps) {
   );
 
   return (
-    <Link
+    <NavigationLink
       href={`/events/${event.id}`}
       className={clsx(
         "group block card hover:shadow-lg transition-all duration-300",
@@ -162,6 +164,6 @@ export function EventCard({ event }: EventCardProps) {
         <User className="w-4 h-4 text-gray-400" />
         <span>主催: {event.host_display_name}</span>
       </div>
-    </Link>
+    </NavigationLink>
   );
 }

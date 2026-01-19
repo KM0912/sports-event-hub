@@ -350,3 +350,35 @@ select.input {
 .status-dot-error {
   @apply bg-error;
 }
+
+/* ===== NAVIGATION LOADING ===== */
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes fade-in-fast {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-progress-indeterminate {
+  width: 50%;
+  animation: progress-indeterminate 1s ease-in-out infinite;
+}
+
+.animate-fade-in-fast {
+  animation: fade-in-fast 0.15s ease-out forwards;
+}
+
+.border-3 {
+  border-width: 3px;
+}

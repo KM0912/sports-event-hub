@@ -18,8 +18,8 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import clsx from "clsx";
-import Link from "next/link";
 import { Metadata } from "next";
+import { NavigationLink } from "@/components/navigation/NavigationLink";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -234,9 +234,9 @@ export default async function EventDetailPage({ params }: PageProps) {
               itemScope
               itemType="https://schema.org/ListItem"
             >
-              <Link href="/" itemProp="item" className="hover:text-primary">
+              <NavigationLink href="/" itemProp="item" className="hover:text-primary">
                 <span itemProp="name">練習会一覧</span>
-              </Link>
+              </NavigationLink>
               <meta itemProp="position" content="1" />
             </li>
             <span className="mx-2">/</span>
@@ -456,18 +456,18 @@ export default async function EventDetailPage({ params }: PageProps) {
           <div className="mt-8 pt-6 border-t border-border md:static sticky bottom-0 bg-white/95 backdrop-blur-sm pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 md:bg-transparent shadow-lg md:shadow-none">
             {isHost ? (
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link
+                <NavigationLink
                   href={`/events/${id}/edit`}
                   className="btn btn-secondary text-base min-h-[48px] md:min-h-[44px]"
                 >
                   編集する
-                </Link>
-                <Link
+                </NavigationLink>
+                <NavigationLink
                   href={`/events/${id}/applications`}
                   className="btn btn-primary text-base min-h-[48px] md:min-h-[44px]"
                 >
                   申請を管理
-                </Link>
+                </NavigationLink>
               </div>
             ) : (
               <ApplyButton

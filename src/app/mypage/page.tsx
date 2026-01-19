@@ -1,7 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { formatInTimeZone } from "date-fns-tz";
 import { APPLICATION_STATUS, LEVELS, LevelKey } from "@/lib/constants";
@@ -17,6 +15,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { Metadata } from "next";
+import { NavigationLink } from "@/components/navigation/NavigationLink";
 
 export const metadata: Metadata = {
   title: "マイページ",
@@ -107,13 +106,13 @@ export default async function MyPage() {
               </p>
             </div>
           </div>
-          <Link
+          <NavigationLink
             href="/profile/edit"
             className="btn btn-ghost text-base min-h-[44px] flex-shrink-0"
           >
             <Settings className="w-5 h-5 md:w-4 md:h-4" />
             <span className="hidden sm:inline">編集</span>
-          </Link>
+          </NavigationLink>
         </div>
       </div>
 
@@ -151,9 +150,9 @@ export default async function MyPage() {
               参加予定の練習会はありません
             </h3>
             <p className="text-muted mb-4">練習会を探して参加してみましょう</p>
-            <Link href="/" className="btn btn-primary inline-flex">
+            <NavigationLink href="/" className="btn btn-primary inline-flex">
               練習会を探す
-            </Link>
+            </NavigationLink>
           </div>
         ) : (
           <div className="space-y-3">
@@ -250,12 +249,12 @@ function ApplicationCard({ application, type }: ApplicationCardProps) {
               <span className="badge badge-warning">承認待ち</span>
             )}
           </div>
-          <Link
+          <NavigationLink
             href={`/events/${event.id}`}
             className="font-semibold text-gray-900 hover:text-primary transition-colors"
           >
             {event.title}
-          </Link>
+          </NavigationLink>
           <div className="flex flex-wrap gap-3 mt-2 text-sm text-muted">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
@@ -280,24 +279,24 @@ function ApplicationCard({ application, type }: ApplicationCardProps) {
         {type === "approved" && !isCanceled && (
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             {canChat && (
-              <Link
+              <NavigationLink
                 href={`/events/${event.id}/chat`}
                 className="btn btn-secondary text-base min-h-[44px]"
               >
                 <MessageCircle className="w-5 h-5 md:w-4 md:h-4" />
                 連絡する
-              </Link>
+              </NavigationLink>
             )}
           </div>
         )}
 
         {type === "pending" && (
-          <Link
+          <NavigationLink
             href={`/events/${event.id}`}
             className="btn btn-ghost text-base min-h-[44px] w-full sm:w-auto"
           >
             詳細を見る
-          </Link>
+          </NavigationLink>
         )}
       </div>
     </div>
