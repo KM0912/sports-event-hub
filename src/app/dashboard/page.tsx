@@ -129,83 +129,86 @@ export default async function DashboardPage() {
                   5
                 )}`}
               >
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span
-                        className={clsx("badge", {
-                          "badge-success": event.remainingSpots > 0,
-                          "badge-warning": event.remainingSpots <= 0,
-                        })}
-                      >
-                        {event.remainingSpots > 0
-                          ? EVENT_STATUS.published
-                          : "満員"}
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span
+                      className={clsx("badge", {
+                        "badge-success": event.remainingSpots > 0,
+                        "badge-warning": event.remainingSpots <= 0,
+                      })}
+                    >
+                      {event.remainingSpots > 0
+                        ? EVENT_STATUS.published
+                        : "満員"}
+                    </span>
+                    <span className="badge badge-primary">
+                      {LEVELS[event.level as LevelKey]}
+                    </span>
+                    {event.pendingCount > 0 && (
+                      <span className="badge badge-warning animate-pulse-soft">
+                        {event.pendingCount}件の申請待ち
                       </span>
-                      <span className="badge badge-primary">
-                        {LEVELS[event.level as LevelKey]}
-                      </span>
-                      {event.pendingCount > 0 && (
-                        <span className="badge badge-warning animate-pulse-soft">
-                          {event.pendingCount}件の申請待ち
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">
-                      {event.title}
-                    </h3>
-                    <div className="flex flex-wrap gap-4 text-sm text-muted">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {formatInTimeZone(
-                          new Date(event.start_at),
-                          "Asia/Tokyo",
-                          "M/d(E) HH:mm",
-                          { locale: ja }
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {event.venue_name}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {event.approvedCount}/{event.visitor_capacity}人
-                      </div>
-                    </div>
+                    )}
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <div className="flex items-center gap-1">
                     <NavigationLink
                       href={`/events/${event.id}`}
-                      className="btn btn-ghost text-base min-h-[44px]"
+                      className="p-2 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      title="詳細を見る"
                     >
-                      <Eye className="w-5 h-5 md:w-4 md:h-4" />
-                      詳細
+                      <Eye className="w-5 h-5" />
                     </NavigationLink>
                     <NavigationLink
                       href={`/events/${event.id}/edit`}
-                      className="btn btn-ghost text-base min-h-[44px]"
+                      className="p-2 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      title="編集する"
                     >
-                      <Edit className="w-5 h-5 md:w-4 md:h-4" />
-                      編集
-                    </NavigationLink>
-                    <NavigationLink
-                      href={`/events/${event.id}/applications`}
-                      className={clsx(
-                        "btn text-base min-h-[44px]",
-                        event.pendingCount > 0 ? "btn-primary" : "btn-secondary"
-                      )}
-                    >
-                      <UserCheck className="w-5 h-5 md:w-4 md:h-4" />
-                      申請管理
-                      {event.pendingCount > 0 && (
-                        <span className="ml-1 font-bold">
-                          ({event.pendingCount})
-                        </span>
-                      )}
+                      <Edit className="w-5 h-5" />
                     </NavigationLink>
                   </div>
                 </div>
+                <NavigationLink
+                  href={`/events/${event.id}`}
+                  className="block hover:text-primary transition-colors"
+                >
+                  <h3 className="font-semibold text-gray-900 mb-2">
+                    {event.title}
+                  </h3>
+                </NavigationLink>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted mb-4">
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {formatInTimeZone(
+                      new Date(event.start_at),
+                      "Asia/Tokyo",
+                      "M/d(E) HH:mm",
+                      { locale: ja }
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-4 h-4" />
+                    {event.venue_name}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    {event.approvedCount}/{event.visitor_capacity}人
+                  </div>
+                </div>
+                <NavigationLink
+                  href={`/events/${event.id}/applications`}
+                  className={clsx(
+                    "btn w-full",
+                    event.pendingCount > 0 ? "btn-primary" : "btn-secondary"
+                  )}
+                >
+                  <UserCheck className="w-4 h-4" />
+                  申請管理
+                  {event.pendingCount > 0 && (
+                    <span className="ml-1 font-bold">
+                      ({event.pendingCount})
+                    </span>
+                  )}
+                </NavigationLink>
               </div>
             ))}
           </div>
