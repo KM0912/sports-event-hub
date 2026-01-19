@@ -87,7 +87,7 @@ function ProfileSetupForm() {
     <div className="min-h-[70vh] flex items-center justify-center">
       <div className="card max-w-md w-full animate-fade-in">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg mb-4">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center shadow-sm mb-4">
             <span className="text-3xl">👋</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">

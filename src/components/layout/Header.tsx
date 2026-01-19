@@ -114,7 +114,7 @@ export function Header() {
             <div className="flex items-center gap-3">
               {user ? (
                 <div className="hidden md:flex items-center gap-3">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
                     <UserIcon className="w-4 h-4 text-gray-500" />
                     <span className="text-sm font-medium text-gray-700">
                       {displayName || 'ユーザー'}
@@ -210,9 +210,9 @@ export function Header() {
               </MobileNavLink>
 
               {/* User Section */}
-              <div className="mt-auto pt-4 border-t border-gray-100 mt-4">
+              <div className="mt-auto pt-4 border-t border-gray-100">
                 <div className="flex items-center gap-3 px-3 py-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <UserIcon className="w-4 h-4 text-primary" />
                   </div>
                   <span className="text-sm text-gray-700 font-medium">

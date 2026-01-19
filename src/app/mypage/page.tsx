@@ -94,8 +94,8 @@ export default async function MyPage() {
       <div className="card mb-6 md:mb-8 p-4 md:p-6 lg:p-8">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 md:gap-4 lg:gap-6">
-            <div className="w-20 h-20 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
-              <User className="w-10 h-10 md:w-8 md:h-8 lg:w-10 lg:h-10 text-white" />
+            <div className="w-16 h-16 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <User className="w-8 h-8 md:w-7 md:h-7 lg:w-8 lg:h-8 text-primary" />
             </div>
             <div>
               <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">
