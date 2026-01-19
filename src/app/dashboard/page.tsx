@@ -115,13 +115,9 @@ export default async function DashboardPage() {
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               開催予定の練習会はありません
             </h3>
-            <p className="text-muted mb-4">
+            <p className="text-muted">
               新しい練習会を作成してビジターを募集しましょう
             </p>
-            <NavigationLink href="/events/new" className="btn btn-primary inline-flex">
-              <Plus className="w-4 h-4" />
-              練習会を作成
-            </NavigationLink>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
