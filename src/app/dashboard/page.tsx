@@ -12,6 +12,7 @@ import {
   Edit,
   Eye,
   UserCheck,
+  Copy,
 } from "lucide-react";
 import clsx from "clsx";
 import { Metadata } from "next";
@@ -150,20 +151,27 @@ export default async function DashboardPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center">
                     <NavigationLink
                       href={`/events/${event.id}`}
-                      className="p-2 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="詳細を見る"
+                      className="flex flex-col items-center px-2 py-1 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                     >
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
+                      <span className="text-[10px] whitespace-nowrap">詳細</span>
                     </NavigationLink>
                     <NavigationLink
                       href={`/events/${event.id}/edit`}
-                      className="p-2 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="編集する"
+                      className="flex flex-col items-center px-2 py-1 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                     >
-                      <Edit className="w-5 h-5" />
+                      <Edit className="w-4 h-4" />
+                      <span className="text-[10px] whitespace-nowrap">編集</span>
+                    </NavigationLink>
+                    <NavigationLink
+                      href={`/events/new?copy=${event.id}`}
+                      className="flex flex-col items-center px-2 py-1 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <Copy className="w-4 h-4" />
+                      <span className="text-[10px] whitespace-nowrap">コピー</span>
                     </NavigationLink>
                   </div>
                 </div>
@@ -225,8 +233,8 @@ export default async function DashboardPage() {
           <div className="space-y-3">
             {pastEvents.slice(0, 5).map((event) => (
               <div key={event.id} className="card opacity-70">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       {event.status === "canceled" ? (
                         <span className="badge badge-error">中止</span>
@@ -234,7 +242,7 @@ export default async function DashboardPage() {
                         <span className="badge badge-muted">終了</span>
                       )}
                     </div>
-                    <h3 className="font-medium text-gray-700">{event.title}</h3>
+                    <h3 className="font-medium text-gray-700 truncate">{event.title}</h3>
                     <p className="text-sm text-muted">
                       {formatInTimeZone(
                         new Date(event.start_at),
@@ -246,13 +254,22 @@ export default async function DashboardPage() {
                       参加者{event.approvedCount}人
                     </p>
                   </div>
-                  <NavigationLink
-                    href={`/events/${event.id}`}
-                    className="btn btn-ghost text-sm"
-                  >
-                    <Eye className="w-4 h-4" />
-                    詳細
-                  </NavigationLink>
+                  <div className="flex items-center flex-shrink-0">
+                    <NavigationLink
+                      href={`/events/${event.id}`}
+                      className="flex flex-col items-center px-2 py-1 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span className="text-[10px] whitespace-nowrap">詳細</span>
+                    </NavigationLink>
+                    <NavigationLink
+                      href={`/events/new?copy=${event.id}`}
+                      className="flex flex-col items-center px-2 py-1 text-muted hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <Copy className="w-4 h-4" />
+                      <span className="text-[10px] whitespace-nowrap">コピー</span>
+                    </NavigationLink>
+                  </div>
                 </div>
               </div>
             ))}
