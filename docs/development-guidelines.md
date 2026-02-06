@@ -215,7 +215,7 @@ export type CreateEventData = z.infer<typeof eventSchema>;
 
 ```
 main (本番環境)
-└── develop (開発・統合環境)
+└── dev (開発・統合環境)
     ├── feature/* (新機能開発)
     ├── fix/* (バグ修正)
     └── refactor/* (リファクタリング)
@@ -223,10 +223,10 @@ main (本番環境)
 
 **運用ルール**:
 - **main**: 本番リリース済みの安定版。タグでバージョン管理
-- **develop**: 次期リリースに向けた開発コード統合
-- **feature/\*、fix/\***: developから分岐し、PRでdevelopへマージ
-- **直接コミット禁止**: main, developへの直接コミットは禁止
-- **マージ方針**: feature→develop は squash merge
+- **dev**: 次期リリースに向けた開発コード統合
+- **feature/\*、fix/\*、refactor/\***: devから分岐し、PRでdevへマージ
+- **直接コミット禁止**: main, devへの直接コミットは禁止
+- **マージ方針**: feature→dev は squash merge、dev→main は merge commit
 
 ### コミットメッセージ規約
 
@@ -435,6 +435,27 @@ it('test1', () => { });
 it('works', () => { });
 ```
 
+### テストコード記述パターン
+
+テストケース内では「Given/When/Then」パターンでコードを構造化する:
+
+```typescript
+it('定員に達している場合、申請が拒否される', () => {
+  // Given: 準備（テストデータのセットアップ）
+  const event = { capacity: 10, approvedCount: 10 };
+
+  // When: 実行（テスト対象の関数呼び出し）
+  const result = canApply(event);
+
+  // Then: 検証（期待値との比較）
+  expect(result).toBe(false);
+});
+```
+
+- **Given**: テストに必要なデータや状態を準備
+- **When**: テスト対象の関数やメソッドを実行
+- **Then**: 期待される結果を検証
+
 ## コードレビュー基準
 
 ### レビューポイント
@@ -454,16 +475,25 @@ it('works', () => { });
 - [ ] N+1クエリが発生していないか
 - [ ] クライアントに不要なデータを送っていないか
 
+**パフォーマンス測定方法**:
+- Supabase Studioの「Query Performance」タブでクエリ実行計画を確認
+- Chrome DevToolsの「Network」タブでレスポンスサイズを確認（目安: API 1回あたり100KB以下）
+- React DevToolsの「Profiler」で不要な再レンダリングがないか確認
+
 **可読性**:
 - [ ] 命名規則に従っているか
 - [ ] 複雑なロジックにコメントがあるか
 
 ### レビューコメントの優先度
 
-- `[必須]`: 修正必須（セキュリティ、バグ）
-- `[推奨]`: 修正推奨（パフォーマンス、可読性）
-- `[提案]`: 検討してほしい
+- `[必須]`: 修正必須（セキュリティ、バグ、データ損失の可能性）
+  - 例: RLSポリシーの抜け、入力バリデーションの欠如、XSS脆弱性、NULL参照
+- `[推奨]`: 修正推奨（パフォーマンス、可読性、保守性）
+  - 例: N+1クエリ、不要なデータ取得、複雑なロジックへのコメント不足
+- `[提案]`: 検討してほしい（設計の改善案、将来的な拡張性）
+  - 例: コンポーネントの再利用性向上、型安全性の強化
 - `[質問]`: 理解のための質問
+  - 例: 特定の実装の意図確認、仕様の明確化
 
 ## 開発環境セットアップ
 
@@ -549,6 +579,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm test
+      - run: npm test -- --coverage
+      - name: Check coverage threshold
+        run: npx vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80
       - run: npm run build
 ```

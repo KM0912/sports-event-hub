@@ -104,6 +104,31 @@
 - **スキーマ名**: `sports_event_hub`
 - 1つのDBに複数プロジェクトを同居させる運用
 
+### データベース設計
+
+#### テーブル一覧
+
+| テーブル名 | 説明 | 主要カラム |
+|-----------|------|-----------|
+| profiles | ユーザープロフィール | id (PK), display_name |
+| events | イベント情報 | id (PK), organizer_id (FK), status |
+| applications | 参加申請 | id (PK), event_id (FK), applicant_id (FK), status |
+| chat_messages | チャットメッセージ | id (PK), event_id (FK), sender_id (FK), receiver_id (FK) |
+| blocks | ブロック情報 | id (PK), organizer_id (FK), blocked_user_id (FK) |
+
+#### 主要な外部キー制約
+
+- `events.organizer_id` → `profiles.id`
+- `applications.event_id` → `events.id`
+- `applications.applicant_id` → `profiles.id`
+- `chat_messages.event_id` → `events.id`
+- `chat_messages.sender_id` → `profiles.id`
+- `chat_messages.receiver_id` → `profiles.id`
+- `blocks.organizer_id` → `profiles.id`
+- `blocks.blocked_user_id` → `profiles.id`
+
+詳細なデータモデル定義（フィールド、制約、ER図）は `functional-design.md` を参照。
+
 ### バックアップ戦略
 
 - **頻度**: Supabaseの自動バックアップ（日次）
@@ -115,14 +140,14 @@
 
 ### レスポンスタイム
 
-| 操作 | 目標時間 | 測定環境 |
-|------|---------|---------|
-| 初回ページロード（トップ） | 3秒以内 | 3G回線 |
-| ページ遷移（SPA内） | 1秒以内 | 4G回線 |
-| イベント一覧表示（20件） | 500ms以内 | 4G回線 |
-| イベント検索（フィルタ適用） | 1秒以内 | 4G回線 |
-| 申請操作（送信〜表示更新） | 1秒以内 | 4G回線 |
-| チャットメッセージ配信 | 500ms以内 | 4G回線 |
+| 操作 | 目標時間 | 測定環境 | 測定条件 |
+|------|---------|---------|---------|
+| 初回ページロード（トップ） | 3秒以内 | 3G回線 | Chrome DevTools Throttling (Regular 3G: 750ms RTT, 1.6Mbps down, 750kbps up) |
+| ページ遷移（SPA内） | 1秒以内 | 4G回線 | Chrome DevTools Throttling (Regular 4G: 150ms RTT, 9Mbps down, 9Mbps up) |
+| イベント一覧表示（20件） | 500ms以内 | 4G回線 | サーバー処理時間（ネットワーク時間を除く） |
+| イベント検索（フィルタ適用） | 1秒以内 | 4G回線 | サーバー処理時間（ネットワーク時間を除く） |
+| 申請操作（送信〜表示更新） | 1秒以内 | 4G回線 | エンドツーエンド時間（送信ボタン押下〜UI更新完了） |
+| チャットメッセージ配信 | 500ms以内 | 4G回線 | 送信者送信完了〜受信者画面表示まで |
 
 ### 最適化手法
 
@@ -183,6 +208,23 @@
   - チャット: イベント+ユーザーペア単位での取得
 - **アーカイブ戦略**: 終了後90日経過したイベントのチャットメッセージを削除（DB Function + pg_cronで自動化）
 
+### モニタリング戦略
+
+**監視指標**:
+- データベースサイズ: 週次チェック（Supabase Dashboard）
+- クエリ実行時間: スロークエリ検出（1秒以上）
+- 同時接続数: Realtime接続数を監視
+
+**アラート基準**:
+- データベースサイズが400MB超過時（Free Plan 500MBの80%）
+- イベント一覧表示が1秒を超えた場合
+- Realtime同時接続数が160を超えた場合（Free Plan 200の80%）
+
+**対応フロー**:
+1. スロークエリ特定 → インデックス追加検討
+2. データ量増加 → アーカイブ実行前倒し
+3. 同時接続数上限接近 → Pro Planへのアップグレード検討
+
 ### 機能拡張性
 
 - **コンポーネント設計**: shadcn/uiベースの再利用可能なコンポーネント
@@ -194,11 +236,15 @@
 ### ユニットテスト
 - **フレームワーク**: Vitest
 - **対象**: バリデーションロジック、日時計算、ステータス遷移ロジック、ユーティリティ関数
-- **カバレッジ目標**: ビジネスロジック80%以上
+- **カバレッジ目標**:
+  - `src/lib/validations/`: 100%
+  - `src/lib/utils/`: 90%以上
+  - `src/actions/` のビジネスロジック部分: 80%以上
 
 ### 統合テスト
-- **方法**: Vitest + Supabase ローカル環境
-- **対象**: Server Actions、RLSポリシー、Database Functions
+- **方法**: Vitest + Supabase ローカル環境（`supabase start`）
+- **対象**: Server Actions（`src/actions/`）、RLSポリシー、Database Functions
+- **実行タイミング**: PR作成時、devマージ前
 
 ### E2Eテスト
 - **ツール**: Playwright
@@ -207,13 +253,24 @@
   - イベント作成〜公開〜検索
   - 参加申請〜承認〜チャット
   - イベントキャンセル〜通知
+- **実行タイミング**: devマージ前、本番デプロイ前
+
+詳細なテスト実装例は `development-guidelines.md` の「テスト戦略」を参照。
 
 ## 技術的制約
 
 ### 環境要件
-- **ブラウザ**: Chrome/Edge/Safari/Firefox 最新2バージョン
-- **モバイル**: iOS Safari 16+、Android Chrome 最新
-- **開発環境**: devcontainer（Docker）
+
+**クライアント環境**:
+- ブラウザ: Chrome/Edge/Safari/Firefox 最新2バージョン
+- モバイル: iOS Safari 16+、Android Chrome 最新
+
+**開発環境**:
+- Docker Desktop: 4.0以上
+- ホストマシン: メモリ8GB以上、空きディスク容量10GB以上
+- devcontainer構成: Node.js v24.11.0、PostgreSQL（Supabase CLI経由）
+
+詳細なセットアップ手順は `development-guidelines.md` の「開発環境セットアップ」を参照。
 
 ### パフォーマンス制約
 - Supabase Free Plan: 500MB データベース、1GB ファイルストレージ
@@ -222,8 +279,12 @@
 
 ### セキュリティ制約
 - Supabase Anon Keyはクライアントに公開される（RLSで保護）
-- Service Role Keyは絶対にクライアントに公開しない
-- Edge Functionsの環境変数はSupabase Dashboardで管理
+- **Service Role Keyは絶対にクライアントに公開しない**
+  - `.env.local`のみに配置（`.gitignore`で管理外）
+  - クライアントサイドコードでは`NEXT_PUBLIC_`プレフィックスを付けない
+  - プリコミットフックで`SUPABASE_SERVICE_ROLE_KEY`の値を含むファイルを検知・拒否
+  - 本番環境ではVercel Environment Variables / GitHub Secretsでのみ提供
+- Edge Functionsの環境変数はSupabase Dashboardで管理（コードに含めない）
 
 ## 依存関係管理
 
@@ -241,3 +302,29 @@
 | eslint | 静的解析 | ^9.0.0 |
 | prettier | フォーマッター | ^3.2.0 |
 | playwright | E2Eテスト | 最新（テストツールは常に最新推奨） |
+
+## デプロイメント構成
+
+### 環境構成
+
+| 環境 | ホスティング | データベース | 用途 |
+|------|-------------|-------------|------|
+| ローカル | localhost:3000 | Supabase Local (Docker) | 開発 |
+| プレビュー | Vercel Preview Deploy | Supabase Staging | PR確認 |
+| 本番 | Vercel Production | Supabase Production | 本番運用 |
+
+### デプロイフロー
+
+1. **開発環境**: feature/* ブランチで開発 → ローカルでテスト
+2. **PRレビュー**: dev へPR → Vercel Preview Deployで確認
+3. **ステージング**: dev マージ → Supabase Stagingで統合テスト
+4. **本番リリース**: main マージ → Vercel Production + Supabase Production
+
+### 環境変数管理
+
+| 変数 | ローカル | Vercel Preview | Vercel Production | Edge Functions |
+|------|---------|---------------|-------------------|---------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `.env.local` | Environment Variables | Environment Variables | - |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `.env.local` | Environment Variables | Environment Variables | - |
+| `SUPABASE_SERVICE_ROLE_KEY` | `.env.local` | Environment Variables | Environment Variables | - |
+| `RESEND_API_KEY` | - | - | - | Supabase Dashboard |

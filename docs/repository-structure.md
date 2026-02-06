@@ -1,5 +1,7 @@
 # リポジトリ構造定義書 (Repository Structure Document)
 
+> **注記**: 本ドキュメントは実装予定の理想的なリポジトリ構造を定義したものです。実際の実装状況とは異なる場合があります。
+
 ## プロジェクト構造
 
 ```
@@ -10,10 +12,12 @@ badminton-event-hub/
 │   ├── actions/                # Server Actions (ビジネスロジック)
 │   ├── lib/                    # ライブラリ・ユーティリティ
 │   ├── types/                  # 型定義
-│   └── constants/              # 定数定義
+│   ├── constants/              # 定数定義
+│   └── middleware.ts           # Next.js認証ミドルウェア
 ├── supabase/
+│   ├── config.toml             # Supabase CLI設定
 │   ├── migrations/             # DBマイグレーション
-│   ├── functions/              # Edge Functions
+│   ├── functions/              # Edge Functions (Deno Runtime)
 │   └── seed.sql                # シードデータ
 ├── tests/
 │   ├── unit/                   # ユニットテスト
@@ -21,8 +25,21 @@ badminton-event-hub/
 │   └── e2e/                    # E2Eテスト
 ├── public/                     # 静的ファイル
 ├── docs/                       # プロジェクトドキュメント
-├── .steering/                  # 作業単位ドキュメント
-└── .claude/                    # Claude Code設定
+├── .steering/                  # 作業単位ドキュメント (git管理外)
+├── .claude/                    # Claude Code設定
+├── .devcontainer/              # devcontainer設定
+├── .husky/                     # Git hooksスクリプト
+├── package.json                # パッケージ定義
+├── package-lock.json           # 依存関係ロック
+├── next.config.ts              # Next.js設定
+├── tailwind.config.ts          # Tailwind CSS設定
+├── tsconfig.json               # TypeScript設定
+├── vitest.config.ts            # Vitest設定
+├── playwright.config.ts        # Playwright設定
+├── eslint.config.js            # ESLint設定
+├── components.json             # shadcn/ui設定
+├── .env.example                # 環境変数サンプル
+└── .env.local                  # 環境変数 (git管理外)
 ```
 
 ## ディレクトリ詳細
@@ -37,10 +54,6 @@ badminton-event-hub/
 - `loading.tsx`: ローディングUI
 - `error.tsx`: エラーUI
 - `not-found.tsx`: 404 UI
-
-**命名規則**:
-- ディレクトリ名: kebab-case（URLパスに対応）
-- ファイル名: Next.jsの規約に従う（`page.tsx`, `layout.tsx`等）
 
 **構造**:
 ```
@@ -65,7 +78,7 @@ src/app/
 │       └── [id]/
 │           └── applications/
 │               └── page.tsx    # 申請管理
-├── mypage/
+├── my-page/
 │   └── page.tsx                # マイページ
 └── chat/
     └── [eventId]/
@@ -80,13 +93,6 @@ src/app/
 ### src/components/ (UIコンポーネント)
 
 **役割**: 再利用可能なUIコンポーネント
-
-**配置ファイル**:
-- `*.tsx`: Reactコンポーネント
-
-**命名規則**:
-- ディレクトリ名: kebab-case（機能単位）
-- ファイル名: kebab-case（`event-card.tsx`, `application-badge.tsx`）
 
 **構造**:
 ```
@@ -129,13 +135,6 @@ src/components/
 
 **役割**: サーバーサイドのビジネスロジック。バリデーション、DB操作、通知トリガー
 
-**配置ファイル**:
-- `*.ts`: Server Action関数群
-
-**命名規則**:
-- ファイル名: kebab-case、機能単位（`event-actions.ts`, `application-actions.ts`）
-- 関数名: camelCase、動詞で始める（`createEvent`, `approveApplication`）
-
 **構造**:
 ```
 src/actions/
@@ -155,19 +154,13 @@ src/actions/
 
 **役割**: Supabaseクライアント初期化、ユーティリティ関数、バリデーションスキーマ
 
-**配置ファイル**:
-- `*.ts`: ユーティリティ関数、設定
-
-**命名規則**:
-- ファイル名: kebab-case（`supabase-client.ts`, `date-utils.ts`）
-
 **構造**:
 ```
 src/lib/
 ├── supabase/
 │   ├── client.ts               # ブラウザ用Supabaseクライアント
 │   ├── server.ts               # Server Actions用Supabaseクライアント
-│   └── middleware.ts            # 認証ミドルウェア用
+│   └── middleware.ts            # 認証ミドルウェア用ヘルパー
 ├── validations/
 │   ├── event-schema.ts         # イベントバリデーションスキーマ (Zod)
 │   ├── application-schema.ts   # 申請バリデーションスキーマ
@@ -185,12 +178,6 @@ src/lib/
 ### src/types/ (型定義)
 
 **役割**: プロジェクト共通の型定義
-
-**配置ファイル**:
-- `*.ts`: TypeScript型定義
-
-**命名規則**:
-- ファイル名: kebab-case（`event.ts`, `application.ts`）
 
 **構造**:
 ```
@@ -211,12 +198,6 @@ src/types/
 
 **役割**: アプリケーション全体で使用する定数
 
-**配置ファイル**:
-- `*.ts`: 定数定義
-
-**命名規則**:
-- ファイル名: kebab-case（`municipalities.ts`, `levels.ts`）
-
 **構造**:
 ```
 src/constants/
@@ -235,35 +216,36 @@ src/constants/
 
 **役割**: データベースマイグレーション、Edge Functions、シードデータ
 
+**データベース構成**:
+- **データベース名**: `portfolio_db`
+- **スキーマ名**: `sports_event_hub`
+- 1つのDBに複数プロジェクトを同居させる運用（詳細は `architecture.md` を参照）
+
 **構造**:
 ```
 supabase/
 ├── config.toml                 # Supabase CLI設定
 ├── migrations/                 # DBマイグレーション
-│   ├── 00001_create_schema.sql
-│   ├── 00002_create_profiles.sql
-│   ├── 00003_create_events.sql
-│   ├── 00004_create_applications.sql
-│   ├── 00005_create_chat_messages.sql
-│   ├── 00006_create_blocks.sql
-│   └── 00007_create_rls_policies.sql
-├── functions/                  # Edge Functions
-│   ├── send-email/
-│   │   └── index.ts            # メール送信関数
+│   ├── 00001_create_schema.sql          # sports_event_hubスキーマ作成
+│   ├── 00002_create_profiles.sql        # profilesテーブル
+│   ├── 00003_create_events.sql          # eventsテーブル
+│   ├── 00004_create_applications.sql    # applicationsテーブル
+│   ├── 00005_create_chat_messages.sql   # chat_messagesテーブル
+│   ├── 00006_create_blocks.sql          # blocksテーブル
+│   └── 00007_create_rls_policies.sql    # RLSポリシー設定
+├── functions/                  # Edge Functions (Deno Runtime)
+│   ├── send-notification/
+│   │   └── index.ts            # 通知トリガー（Resend API経由でメール送信）
 │   └── _shared/
 │       └── email-templates.ts  # メールテンプレート
 └── seed.sql                    # 開発用シードデータ
 ```
 
-**命名規則**:
-- マイグレーション: `NNNNN_description.sql`（連番 + 説明）
-- Edge Functions: kebab-case ディレクトリ
-
 ### tests/ (テストディレクトリ)
 
 #### unit/
 
-**役割**: ユニットテストの配置
+**役割**: ユニットテストの配置。`src/` ディレクトリと同じ構造を反映する。
 
 **構造**:
 ```
@@ -271,19 +253,18 @@ tests/unit/
 ├── actions/
 │   ├── event-actions.test.ts
 │   └── application-actions.test.ts
-├── lib/
-│   ├── validations/
-│   │   ├── event-schema.test.ts
-│   │   └── application-schema.test.ts
-│   └── utils/
-│       └── date-utils.test.ts
-└── constants/
-    └── municipalities.test.ts
+├── components/
+│   ├── event/
+│   │   └── event-card.test.tsx
+│   └── application/
+│       └── application-badge.test.tsx
+└── lib/
+    ├── validations/
+    │   ├── event-schema.test.ts
+    │   └── application-schema.test.ts
+    └── utils/
+        └── date-utils.test.ts
 ```
-
-**命名規則**:
-- パターン: `[テスト対象ファイル名].test.ts`
-- srcディレクトリと同じ構造を反映
 
 #### integration/
 
@@ -336,19 +317,19 @@ tests/e2e/
 | レイアウト | `src/app/[route]/` | `layout.tsx` | `src/app/layout.tsx` |
 | UIコンポーネント | `src/components/[feature]/` | kebab-case.tsx | `event-card.tsx` |
 | shadcn/uiコンポーネント | `src/components/ui/` | kebab-case.tsx | `button.tsx` |
-| Server Actions | `src/actions/` | kebab-case.ts | `event-actions.ts` |
-| バリデーション | `src/lib/validations/` | kebab-case.ts | `event-schema.ts` |
-| ユーティリティ | `src/lib/utils/` | kebab-case.ts | `date-utils.ts` |
+| Server Actions | `src/actions/` | `[機能名]-actions.ts` | `event-actions.ts` |
+| バリデーション | `src/lib/validations/` | `[機能名]-schema.ts` | `event-schema.ts` |
+| ユーティリティ | `src/lib/utils/` | `[目的]-utils.ts` | `date-utils.ts` |
 | 型定義 | `src/types/` | kebab-case.ts | `event.ts` |
 | 定数 | `src/constants/` | kebab-case.ts | `municipalities.ts` |
-| マイグレーション | `supabase/migrations/` | `NNNNN_*.sql` | `00001_create_schema.sql` |
-| Edge Functions | `supabase/functions/[name]/` | `index.ts` | `send-email/index.ts` |
+| マイグレーション | `supabase/migrations/` | `NNNNN_description.sql`（5桁連番） | `00001_create_schema.sql` |
+| Edge Functions | `supabase/functions/[name]/` | `index.ts` | `send-notification/index.ts` |
 
 ### テストファイル
 
 | テスト種別 | 配置先 | 命名規則 | 例 |
 |-----------|--------|---------|-----|
-| ユニットテスト | `tests/unit/` | `[対象].test.ts` | `event-schema.test.ts` |
+| ユニットテスト | `tests/unit/` | `[対象].test.ts(x)` | `event-schema.test.ts` |
 | 統合テスト | `tests/integration/` | `[機能].test.ts` | `event-crud.test.ts` |
 | E2Eテスト | `tests/e2e/` | `[シナリオ].test.ts` | `auth-flow.test.ts` |
 
@@ -362,9 +343,10 @@ tests/e2e/
 | `vitest.config.ts` | ルート | Vitest設定 |
 | `playwright.config.ts` | ルート | Playwright設定 |
 | `eslint.config.js` | ルート | ESLint設定 |
+| `components.json` | ルート | shadcn/ui設定 |
+| `.env.example` | ルート | 環境変数サンプル（git管理対象） |
 | `.env.local` | ルート | 環境変数（git管理外） |
 | `supabase/config.toml` | supabase/ | Supabase CLI設定 |
-| `components.json` | ルート | shadcn/ui設定 |
 | `middleware.ts` | `src/` | Next.js認証ミドルウェア |
 
 ## 命名規則
@@ -381,7 +363,8 @@ tests/e2e/
 - **ユーティリティ**: kebab-case + `-utils` 接尾辞（`date-utils.ts`）
 - **型定義**: kebab-case（`event.ts`）
 - **定数**: kebab-case（`municipalities.ts`）
-- **テスト**: `[対象].test.ts`（`event-actions.test.ts`）
+- **テスト**: `[対象].test.ts(x)`（`event-actions.test.ts`）
+- **マイグレーション**: `NNNNN_description.sql`（5桁連番 + アンダースコア + 説明）
 
 ### 変数・関数名
 - **コンポーネント名**: PascalCase（`EventCard`, `ApplicationBadge`）
@@ -429,7 +412,7 @@ types/ , constants/ (型定義・定数)
 ### DBマイグレーションの追加
 
 テーブルやカラムを追加する場合:
-1. `supabase/migrations/` に連番でSQLファイルを作成
+1. `supabase/migrations/` に5桁連番でSQLファイルを作成
 2. `supabase db push` でローカルに適用
 3. 型定義を `supabase gen types` で再生成
 
