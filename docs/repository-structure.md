@@ -311,43 +311,43 @@ tests/e2e/
 
 ### ソースファイル
 
-| ファイル種別 | 配置先 | 命名規則 | 例 |
-|------------|--------|---------|-----|
-| ページ | `src/app/[route]/` | `page.tsx` | `src/app/events/[id]/page.tsx` |
-| レイアウト | `src/app/[route]/` | `layout.tsx` | `src/app/layout.tsx` |
-| UIコンポーネント | `src/components/[feature]/` | kebab-case.tsx | `event-card.tsx` |
-| shadcn/uiコンポーネント | `src/components/ui/` | kebab-case.tsx | `button.tsx` |
-| Server Actions | `src/actions/` | `[機能名]-actions.ts` | `event-actions.ts` |
-| バリデーション | `src/lib/validations/` | `[機能名]-schema.ts` | `event-schema.ts` |
-| ユーティリティ | `src/lib/utils/` | `[目的]-utils.ts` | `date-utils.ts` |
-| 型定義 | `src/types/` | kebab-case.ts | `event.ts` |
-| 定数 | `src/constants/` | kebab-case.ts | `municipalities.ts` |
-| マイグレーション | `supabase/migrations/` | `NNNNN_description.sql`（5桁連番） | `00001_create_schema.sql` |
-| Edge Functions | `supabase/functions/[name]/` | `index.ts` | `send-notification/index.ts` |
+| ファイル種別            | 配置先                       | 命名規則                           | 例                             |
+| ----------------------- | ---------------------------- | ---------------------------------- | ------------------------------ |
+| ページ                  | `src/app/[route]/`           | `page.tsx`                         | `src/app/events/[id]/page.tsx` |
+| レイアウト              | `src/app/[route]/`           | `layout.tsx`                       | `src/app/layout.tsx`           |
+| UIコンポーネント        | `src/components/[feature]/`  | kebab-case.tsx                     | `event-card.tsx`               |
+| shadcn/uiコンポーネント | `src/components/ui/`         | kebab-case.tsx                     | `button.tsx`                   |
+| Server Actions          | `src/actions/`               | `[機能名]-actions.ts`              | `event-actions.ts`             |
+| バリデーション          | `src/lib/validations/`       | `[機能名]-schema.ts`               | `event-schema.ts`              |
+| ユーティリティ          | `src/lib/utils/`             | `[目的]-utils.ts`                  | `date-utils.ts`                |
+| 型定義                  | `src/types/`                 | kebab-case.ts                      | `event.ts`                     |
+| 定数                    | `src/constants/`             | kebab-case.ts                      | `municipalities.ts`            |
+| マイグレーション        | `supabase/migrations/`       | `NNNNN_description.sql`（5桁連番） | `00001_create_schema.sql`      |
+| Edge Functions          | `supabase/functions/[name]/` | `index.ts`                         | `send-notification/index.ts`   |
 
 ### テストファイル
 
-| テスト種別 | 配置先 | 命名規則 | 例 |
-|-----------|--------|---------|-----|
-| ユニットテスト | `tests/unit/` | `[対象].test.ts(x)` | `event-schema.test.ts` |
-| 統合テスト | `tests/integration/` | `[機能].test.ts` | `event-crud.test.ts` |
-| E2Eテスト | `tests/e2e/` | `[シナリオ].test.ts` | `auth-flow.test.ts` |
+| テスト種別     | 配置先               | 命名規則             | 例                     |
+| -------------- | -------------------- | -------------------- | ---------------------- |
+| ユニットテスト | `tests/unit/`        | `[対象].test.ts(x)`  | `event-schema.test.ts` |
+| 統合テスト     | `tests/integration/` | `[機能].test.ts`     | `event-crud.test.ts`   |
+| E2Eテスト      | `tests/e2e/`         | `[シナリオ].test.ts` | `auth-flow.test.ts`    |
 
 ### 設定ファイル
 
-| ファイル | 配置先 | 説明 |
-|---------|--------|------|
-| `next.config.ts` | ルート | Next.js設定 |
-| `tailwind.config.ts` | ルート | Tailwind CSS設定 |
-| `tsconfig.json` | ルート | TypeScript設定 |
-| `vitest.config.ts` | ルート | Vitest設定 |
-| `playwright.config.ts` | ルート | Playwright設定 |
-| `eslint.config.js` | ルート | ESLint設定 |
-| `components.json` | ルート | shadcn/ui設定 |
-| `.env.example` | ルート | 環境変数サンプル（git管理対象） |
-| `.env.local` | ルート | 環境変数（git管理外） |
-| `supabase/config.toml` | supabase/ | Supabase CLI設定 |
-| `middleware.ts` | `src/` | Next.js認証ミドルウェア |
+| ファイル               | 配置先    | 説明                            |
+| ---------------------- | --------- | ------------------------------- |
+| `next.config.ts`       | ルート    | Next.js設定                     |
+| `tailwind.config.ts`   | ルート    | Tailwind CSS設定                |
+| `tsconfig.json`        | ルート    | TypeScript設定                  |
+| `vitest.config.ts`     | ルート    | Vitest設定                      |
+| `playwright.config.ts` | ルート    | Playwright設定                  |
+| `eslint.config.js`     | ルート    | ESLint設定                      |
+| `components.json`      | ルート    | shadcn/ui設定                   |
+| `.env.example`         | ルート    | 環境変数サンプル（git管理対象） |
+| `.env.local`           | ルート    | 環境変数（git管理外）           |
+| `supabase/config.toml` | supabase/ | Supabase CLI設定                |
+| `middleware.ts`        | `src/`    | Next.js認証ミドルウェア         |
 
 ## 命名規則
 

@@ -11,4 +11,11 @@ CLAUDE.md
 node_modules/
 
 # ビルド成果物
+.next/
 dist/
+
+# テスト
+coverage/
+
+# マイグレーション
+supabase/migrations/

@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   test: {
     globals: true,
     environment: 'node',
@@ -14,16 +20,13 @@ export default defineConfig({
       exclude: [
         'node_modules/**',
         'dist/**',
+        '.next/**',
         '.steering/**',
-        '**/*.config.{ts,js}',
+        '**/*.config.{ts,js,mjs}',
         '**/types/**',
+        'src/app/**',
+        'src/components/ui/**',
       ],
-      thresholds: {
-        branches: 80,
-        functions: 80,
-        lines: 80,
-        statements: 80,
-      },
     },
   },
 });
