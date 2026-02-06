@@ -52,12 +52,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const totalCount = result.success ? result.data.totalCount : 0;
   const totalPages = Math.ceil(totalCount / perPage);
 
-  const hasFilters = params.dateRange || params.municipality || params.level;
-
   return (
     <>
-      {/* ヒーローセクション - フィルタ未使用・1ページ目のみ表示 */}
-      {!hasFilters && page === 1 && (
+      {/* ヒーローセクション - 1ページ目のみ表示 */}
+      {page === 1 && (
         <section className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-primary/8 to-background">
           {/* 装飾背景 */}
           <div className="absolute inset-0">

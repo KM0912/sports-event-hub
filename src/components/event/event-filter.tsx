@@ -33,11 +33,11 @@ export function EventFilter() {
       params.delete(key);
     }
     params.delete('page');
-    router.push(`/?${params.toString()}`);
+    router.push(`/?${params.toString()}`, { scroll: false });
   }
 
   function clearFilters() {
-    router.push('/');
+    router.push('/', { scroll: false });
   }
 
   const hasFilters =
