@@ -7,14 +7,23 @@
 -- ユーザー1: 主催者（太郎）
 INSERT INTO auth.users (
   instance_id, id, aud, role, email, encrypted_password,
-  email_confirmed_at, created_at, updated_at, confirmation_token, raw_app_meta_data, raw_user_meta_data
+  email_confirmed_at, created_at, updated_at,
+  confirmation_token, recovery_token,
+  email_change, email_change_token_new, email_change_token_current, email_change_confirm_status,
+  phone, phone_change, phone_change_token, reauthentication_token,
+  is_sso_user, is_anonymous,
+  raw_app_meta_data, raw_user_meta_data
 ) VALUES (
   '00000000-0000-0000-0000-000000000000',
   'a1111111-1111-1111-1111-111111111111',
   'authenticated', 'authenticated',
   'taro@example.com',
   crypt('password123', gen_salt('bf')),
-  now(), now(), now(), '',
+  now(), now(), now(),
+  '', '',
+  '', '', '', 0,
+  NULL, '', '', '',
+  false, false,
   '{"provider":"email","providers":["email"]}',
   '{}'
 );
@@ -29,14 +38,23 @@ INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, 
 -- ユーザー2: 参加者（花子）
 INSERT INTO auth.users (
   instance_id, id, aud, role, email, encrypted_password,
-  email_confirmed_at, created_at, updated_at, confirmation_token, raw_app_meta_data, raw_user_meta_data
+  email_confirmed_at, created_at, updated_at,
+  confirmation_token, recovery_token,
+  email_change, email_change_token_new, email_change_token_current, email_change_confirm_status,
+  phone, phone_change, phone_change_token, reauthentication_token,
+  is_sso_user, is_anonymous,
+  raw_app_meta_data, raw_user_meta_data
 ) VALUES (
   '00000000-0000-0000-0000-000000000000',
   'b2222222-2222-2222-2222-222222222222',
   'authenticated', 'authenticated',
   'hanako@example.com',
   crypt('password123', gen_salt('bf')),
-  now(), now(), now(), '',
+  now(), now(), now(),
+  '', '',
+  '', '', '', 0,
+  NULL, '', '', '',
+  false, false,
   '{"provider":"email","providers":["email"]}',
   '{}'
 );
@@ -51,14 +69,23 @@ INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, 
 -- ユーザー3: 参加者（次郎）
 INSERT INTO auth.users (
   instance_id, id, aud, role, email, encrypted_password,
-  email_confirmed_at, created_at, updated_at, confirmation_token, raw_app_meta_data, raw_user_meta_data
+  email_confirmed_at, created_at, updated_at,
+  confirmation_token, recovery_token,
+  email_change, email_change_token_new, email_change_token_current, email_change_confirm_status,
+  phone, phone_change, phone_change_token, reauthentication_token,
+  is_sso_user, is_anonymous,
+  raw_app_meta_data, raw_user_meta_data
 ) VALUES (
   '00000000-0000-0000-0000-000000000000',
   'c3333333-3333-3333-3333-333333333333',
   'authenticated', 'authenticated',
   'jiro@example.com',
   crypt('password123', gen_salt('bf')),
-  now(), now(), now(), '',
+  now(), now(), now(),
+  '', '',
+  '', '', '', 0,
+  NULL, '', '', '',
+  false, false,
   '{"provider":"email","providers":["email"]}',
   '{}'
 );
