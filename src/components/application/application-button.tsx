@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Send, Loader2, CheckCircle2, Clock, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -87,18 +88,32 @@ export function ApplicationButton({
   }
 
   if (existing) {
+    const isPending = existing.status === 'pending';
     return (
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-muted-foreground">
-          {existing.status === 'pending' ? '申請中' : '参加確定'}
-        </span>
+      <div className="flex items-center gap-3 rounded-xl bg-muted/50 px-4 py-3 ring-1 ring-border/40">
+        <div className="flex flex-1 items-center gap-2">
+          {isPending ? (
+            <Clock className="h-4 w-4 text-amber-500" />
+          ) : (
+            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+          )}
+          <span className="text-sm font-medium">
+            {isPending ? '申請中' : '参加確定'}
+          </span>
+        </div>
         <Button
           variant="outline"
           size="sm"
           onClick={handleCancel}
           disabled={submitting}
+          className="gap-1 border-border/60"
         >
-          {submitting ? '処理中...' : 'キャンセル'}
+          {submitting ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <X className="h-3.5 w-3.5" />
+          )}
+          キャンセル
         </Button>
       </div>
     );
@@ -107,27 +122,48 @@ export function ApplicationButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full">参加を申請する</Button>
+        <Button className="w-full gap-2 font-semibold shadow-sm" size="lg">
+          <Send className="h-4 w-4" />
+          参加を申請する
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>参加申請</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Send className="h-4 w-4 text-primary" />
+            参加申請
+          </DialogTitle>
           <DialogDescription>
             主催者へのコメントを添えて申請できます（任意）
           </DialogDescription>
         </DialogHeader>
         <Textarea
-          placeholder="コメント（任意）"
+          placeholder="自己紹介や参加動機など（任意）"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={500}
+          rows={4}
         />
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>
-            キャンセル
+            やめる
           </Button>
-          <Button onClick={handleApply} disabled={submitting}>
-            {submitting ? '送信中...' : '申請する'}
+          <Button
+            onClick={handleApply}
+            disabled={submitting}
+            className="gap-1.5 font-semibold"
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                送信中...
+              </>
+            ) : (
+              <>
+                <Send className="h-4 w-4" />
+                申請する
+              </>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

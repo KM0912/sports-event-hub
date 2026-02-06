@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
+import { SlidersHorizontal, X } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -45,12 +46,16 @@ export function EventFilter() {
     searchParams.has('level');
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2.5">
+      <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+        <SlidersHorizontal className="h-4 w-4" />
+        <span className="hidden sm:inline">絞り込み</span>
+      </div>
       <Select
         value={searchParams.get('dateRange') || ''}
         onValueChange={(v) => updateFilter('dateRange', v || undefined)}
       >
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="h-9 w-[130px] border-border/60 bg-card text-sm shadow-sm">
           <SelectValue placeholder="日付" />
         </SelectTrigger>
         <SelectContent>
@@ -66,7 +71,7 @@ export function EventFilter() {
         value={searchParams.get('municipality') || ''}
         onValueChange={(v) => updateFilter('municipality', v || undefined)}
       >
-        <SelectTrigger className="w-[160px]">
+        <SelectTrigger className="h-9 w-[150px] border-border/60 bg-card text-sm shadow-sm">
           <SelectValue placeholder="市区町村" />
         </SelectTrigger>
         <SelectContent>
@@ -82,7 +87,7 @@ export function EventFilter() {
         value={searchParams.get('level') || ''}
         onValueChange={(v) => updateFilter('level', v || undefined)}
       >
-        <SelectTrigger className="w-[160px]">
+        <SelectTrigger className="h-9 w-[150px] border-border/60 bg-card text-sm shadow-sm">
           <SelectValue placeholder="レベル" />
         </SelectTrigger>
         <SelectContent>
@@ -95,7 +100,13 @@ export function EventFilter() {
       </Select>
 
       {hasFilters && (
-        <Button variant="ghost" size="sm" onClick={clearFilters}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearFilters}
+          className="gap-1 text-muted-foreground hover:text-destructive"
+        >
+          <X className="h-3.5 w-3.5" />
           クリア
         </Button>
       )}
