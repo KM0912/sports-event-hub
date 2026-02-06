@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card';
 import { signUp, signIn, signInWithGoogle } from '@/actions/auth-actions';
 import { ROUTES } from '@/constants/routes';
+import { ShuttlecockIcon } from '@/components/layout/shuttlecock-icon';
 
 export function LoginForm() {
   const router = useRouter();
@@ -65,11 +66,11 @@ export function LoginForm() {
     <div className="w-full max-w-md">
       {/* ブランドヘッダー */}
       <div className="mb-6 text-center">
-        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-2xl font-black text-primary-foreground shadow-lg shadow-primary/20">
-          B
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+          <ShuttlecockIcon className="h-7 w-7" />
         </div>
         <h1 className="text-xl font-bold tracking-tight">
-          Badminton Event Hub
+          バドミントン練習会 宮城
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           宮城県のバドミントン練習会プラットフォーム

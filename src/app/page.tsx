@@ -1,6 +1,13 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
-import { Search, CalendarPlus, MapPin, Users } from 'lucide-react';
+import {
+  Search,
+  CalendarPlus,
+  MapPin,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { getEvents } from '@/actions/event-actions';
 import { EventList } from '@/components/event/event-list';
 import { EventFilter } from '@/components/event/event-filter';
@@ -51,11 +58,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     <>
       {/* ヒーローセクション - フィルタ未使用・1ページ目のみ表示 */}
       {!hasFilters && page === 1 && (
-        <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-primary/5 to-background">
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-primary/8 to-background">
           {/* 装飾背景 */}
-          <div className="absolute inset-0 opacity-[0.03]">
-            <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary" />
-            <div className="absolute -bottom-10 -left-10 h-60 w-60 rounded-full bg-accent" />
+          <div className="absolute inset-0">
+            <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary/10" />
+            <div className="absolute -bottom-10 -left-10 h-60 w-60 rounded-full bg-accent/10" />
           </div>
           <div className="container relative mx-auto px-4 py-16 sm:py-20">
             <div className="mx-auto max-w-2xl text-center">
@@ -67,7 +74,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               <p className="mb-8 text-base leading-relaxed text-muted-foreground sm:text-lg">
                 レベル・地域で自分にぴったりの練習会を検索。
                 <br className="hidden sm:block" />
-                ワンクリックで参加申請、主催者とのチャットもかんたん。
+                かんたんに参加申請、主催者とのチャットもスムーズ。
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link href="#events">
@@ -121,7 +128,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 </div>
                 <h3 className="text-sm font-semibold">安心の承認制</h3>
                 <p className="text-xs leading-relaxed text-muted-foreground">
-                  主催者が参加者を管理
+                  主催者が参加者を管理。
                   <br />
                   安心して参加できる
                 </p>
@@ -147,6 +154,29 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
         {totalPages > 1 && (
           <div className="mt-10 flex items-center justify-center gap-1.5">
+            {page > 1 ? (
+              <Link
+                href={`/?${new URLSearchParams({
+                  ...(params.dateRange ? { dateRange: params.dateRange } : {}),
+                  ...(params.municipality
+                    ? { municipality: params.municipality }
+                    : {}),
+                  ...(params.level ? { level: params.level } : {}),
+                  page: String(page - 1),
+                }).toString()}`}
+              >
+                <Button variant="outline" size="sm" className="gap-1">
+                  <ChevronLeft className="h-4 w-4" />
+                  前へ
+                </Button>
+              </Link>
+            ) : (
+              <Button variant="outline" size="sm" className="gap-1" disabled>
+                <ChevronLeft className="h-4 w-4" />
+                前へ
+              </Button>
+            )}
+
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
               const searchParamsStr = new URLSearchParams({
                 ...(params.dateRange ? { dateRange: params.dateRange } : {}),
@@ -173,6 +203,29 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 </Link>
               );
             })}
+
+            {page < totalPages ? (
+              <Link
+                href={`/?${new URLSearchParams({
+                  ...(params.dateRange ? { dateRange: params.dateRange } : {}),
+                  ...(params.municipality
+                    ? { municipality: params.municipality }
+                    : {}),
+                  ...(params.level ? { level: params.level } : {}),
+                  page: String(page + 1),
+                }).toString()}`}
+              >
+                <Button variant="outline" size="sm" className="gap-1">
+                  次へ
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <Button variant="outline" size="sm" className="gap-1" disabled>
+                次へ
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         )}
       </section>

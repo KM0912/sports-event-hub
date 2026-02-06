@@ -14,11 +14,11 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Badminton Event Hub',
-    template: '%s | Badminton Event Hub',
+    default: 'バドミントン練習会 宮城',
+    template: '%s | バドミントン練習会 宮城',
   },
   description:
-    '宮城県のバドミントン練習会を探して参加しよう。レベル・地域で検索、ワンクリックで申請。主催者の運営もラクラク。',
+    '宮城県のバドミントン練習会を探して参加しよう。レベル・地域で検索、かんたんに参加申請。主催者の運営もラクラク。',
 };
 
 export default function RootLayout({

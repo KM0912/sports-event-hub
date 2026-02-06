@@ -11,6 +11,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { signOut } from '@/actions/auth-actions';
+import { ShuttlecockIcon } from '@/components/layout/shuttlecock-icon';
 
 export async function Header() {
   const supabase = await createClient();
@@ -54,11 +55,11 @@ export async function Header() {
           href={ROUTES.HOME}
           className="flex items-center gap-2 transition-opacity hover:opacity-80"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-lg font-black text-primary-foreground">
-            B
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <ShuttlecockIcon className="h-5 w-5" />
           </span>
           <span className="hidden text-lg font-bold tracking-tight sm:inline">
-            Badminton Event Hub
+            バドミントン練習会 宮城
           </span>
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2">
