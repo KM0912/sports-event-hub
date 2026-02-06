@@ -64,14 +64,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary/10" />
             <div className="absolute -bottom-10 -left-10 h-60 w-60 rounded-full bg-accent/10" />
           </div>
-          <div className="container relative mx-auto px-4 py-16 sm:py-20">
+          <div className="container relative mx-auto px-4 py-10 sm:py-16 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
-              <h1 className="mb-4 text-3xl font-black tracking-tight sm:text-4xl md:text-5xl">
+              <h1 className="mb-4 text-2xl font-black tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
                 宮城県の
                 <span className="text-primary">バドミントン練習会</span>
                 を見つけよう
               </h1>
-              <p className="mb-8 text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="mb-6 text-sm leading-relaxed text-muted-foreground sm:mb-8 sm:text-base md:text-lg">
                 レベル・地域で自分にぴったりの練習会を検索。
                 <br className="hidden sm:block" />
                 かんたんに参加申請、主催者とのチャットもスムーズ。
@@ -99,7 +99,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </div>
             </div>
             {/* 特徴 */}
-            <div className="mx-auto mt-14 grid max-w-3xl gap-6 sm:grid-cols-3">
+            <div className="mx-auto mt-10 grid max-w-3xl gap-6 sm:mt-14 sm:grid-cols-3">
               <div className="flex flex-col items-center gap-2 text-center">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
                   <Search className="h-5 w-5 text-primary" />
@@ -153,7 +153,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <EventList events={events} />
 
         {totalPages > 1 && (
-          <div className="mt-10 flex items-center justify-center gap-1.5">
+          <div className="mt-10 flex items-center justify-center gap-2">
             {page > 1 ? (
               <Link
                 href={`/?${new URLSearchParams({
@@ -165,13 +165,22 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   page: String(page - 1),
                 }).toString()}`}
               >
-                <Button variant="outline" size="sm" className="gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="min-h-10 gap-1 sm:min-h-0"
+                >
                   <ChevronLeft className="h-4 w-4" />
                   前へ
                 </Button>
               </Link>
             ) : (
-              <Button variant="outline" size="sm" className="gap-1" disabled>
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-10 gap-1 sm:min-h-0"
+                disabled
+              >
                 <ChevronLeft className="h-4 w-4" />
                 前へ
               </Button>
@@ -192,11 +201,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   <Button
                     variant={p === page ? 'default' : 'outline'}
                     size="sm"
-                    className={
+                    className={`min-h-10 min-w-10 sm:min-h-0 sm:min-w-0 ${
                       p === page
                         ? 'pointer-events-none font-bold shadow-sm'
                         : ''
-                    }
+                    }`}
                   >
                     {p}
                   </Button>
@@ -215,13 +224,22 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   page: String(page + 1),
                 }).toString()}`}
               >
-                <Button variant="outline" size="sm" className="gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="min-h-10 gap-1 sm:min-h-0"
+                >
                   次へ
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </Link>
             ) : (
-              <Button variant="outline" size="sm" className="gap-1" disabled>
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-10 gap-1 sm:min-h-0"
+                disabled
+              >
                 次へ
                 <ChevronRight className="h-4 w-4" />
               </Button>

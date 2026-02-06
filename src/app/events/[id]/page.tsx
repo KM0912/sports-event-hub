@@ -101,7 +101,7 @@ export default async function EventDetailPage({
 
           <Card className="overflow-hidden border-border/60 shadow-lg">
             {/* ヘッダー */}
-            <div className="bg-gradient-to-r from-primary/8 to-primary/3 px-6 pb-5 pt-6">
+            <div className="bg-gradient-to-r from-primary/8 to-primary/3 px-4 pb-4 pt-5 sm:px-6 sm:pb-5 sm:pt-6">
               <div className="mb-3 flex flex-wrap gap-1.5">
                 <Badge
                   variant="outline"
@@ -121,7 +121,7 @@ export default async function EventDetailPage({
               </h1>
             </div>
 
-            <CardContent className="space-y-5 p-6">
+            <CardContent className="space-y-5 p-4 sm:p-6">
               {/* 基本情報グリッド */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="flex items-start gap-3">
@@ -271,19 +271,19 @@ export default async function EventDetailPage({
                   {formatDate(event.createdAt)}
                 </span>
               </div>
-
-              {/* 申請ボタン */}
-              {user && event.status === 'published' && (
-                <div className="pt-1">
-                  <ApplicationButton
-                    eventId={event.id}
-                    organizerId={event.organizerId}
-                    userId={user.id}
-                  />
-                </div>
-              )}
             </CardContent>
           </Card>
+
+          {/* 申請ボタン - モバイルではスティッキー */}
+          {user && event.status === 'published' && (
+            <div className="sticky bottom-0 z-10 -mx-4 border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur-sm sm:static sm:mx-0 sm:mt-4 sm:border-t-0 sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none">
+              <ApplicationButton
+                eventId={event.id}
+                organizerId={event.organizerId}
+                userId={user.id}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

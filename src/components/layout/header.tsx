@@ -62,20 +62,24 @@ export async function Header() {
             バドミントン練習会 宮城
           </span>
         </Link>
-        <nav className="flex items-center gap-1 sm:gap-2">
+        <nav className="flex items-center gap-0.5 sm:gap-2">
           {user ? (
             <>
               <Link href={ROUTES.EVENTS_NEW}>
                 <Button
                   size="sm"
-                  className="gap-1.5 bg-primary font-semibold shadow-sm hover:bg-primary/90"
+                  className="min-h-10 min-w-10 gap-1.5 bg-primary font-semibold shadow-sm hover:bg-primary/90 sm:min-h-0 sm:min-w-0"
                 >
                   <CalendarPlus className="h-4 w-4" />
                   <span className="hidden sm:inline">練習会を作成</span>
                 </Button>
               </Link>
               <Link href={ROUTES.DASHBOARD}>
-                <Button variant="ghost" size="sm" className="relative gap-1.5">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0"
+                >
                   <LayoutDashboard className="h-4 w-4" />
                   <span className="hidden sm:inline">ダッシュボード</span>
                   {pendingCount > 0 && (
@@ -89,7 +93,11 @@ export async function Header() {
                 </Button>
               </Link>
               <Link href={ROUTES.MY_PAGE}>
-                <Button variant="ghost" size="sm" className="relative gap-1.5">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0"
+                >
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">マイページ</span>
                   {unreadChatCount > 0 && (
@@ -107,7 +115,7 @@ export async function Header() {
                   variant="ghost"
                   size="sm"
                   type="submit"
-                  className="gap-1.5 text-muted-foreground hover:text-foreground"
+                  className="min-h-10 min-w-10 gap-1.5 text-muted-foreground hover:text-foreground sm:min-h-0 sm:min-w-0"
                 >
                   <LogOut className="h-4 w-4" />
                   <span className="hidden sm:inline">ログアウト</span>

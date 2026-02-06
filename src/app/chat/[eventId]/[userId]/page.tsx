@@ -128,8 +128,8 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="container mx-auto flex h-[calc(100vh-8rem)] max-w-2xl flex-col px-4 py-4">
-      <div className="flex-1 space-y-3 overflow-y-auto pb-4">
+    <div className="container mx-auto flex h-[calc(100dvh-4rem)] max-w-2xl flex-col px-4 py-3 sm:h-[calc(100dvh-8rem)] sm:py-4">
+      <div className="flex-1 space-y-3 overflow-y-auto pb-3 sm:pb-4">
         {messages.length === 0 && (
           <p className="text-center text-sm text-muted-foreground">
             メッセージはまだありません
@@ -144,7 +144,7 @@ export default function ChatPage() {
         ))}
         <div ref={bottomRef} />
       </div>
-      <div className="space-y-2 border-t pt-3">
+      <div className="shrink-0 space-y-2 border-t pt-2 sm:pt-3">
         <QuickMessage eventId={eventId} receiverId={otherUserId} />
         <ChatInput eventId={eventId} receiverId={otherUserId} />
       </div>

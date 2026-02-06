@@ -232,6 +232,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                   id="capacity"
                   name="capacity"
                   type="number"
+                  inputMode="numeric"
                   min={1}
                   defaultValue={initialData?.capacity}
                   placeholder="例: 8"
@@ -244,6 +245,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                   id="fee"
                   name="fee"
                   type="number"
+                  inputMode="numeric"
                   min={0}
                   defaultValue={initialData?.fee}
                   placeholder="例: 500"
@@ -256,6 +258,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                   id="deadlineHoursBefore"
                   name="deadlineHoursBefore"
                   type="number"
+                  inputMode="numeric"
                   min={1}
                   max={72}
                   defaultValue={initialData?.deadlineHoursBefore ?? ''}
