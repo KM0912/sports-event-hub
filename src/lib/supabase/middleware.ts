@@ -57,7 +57,7 @@ export async function updateSession(request: NextRequest) {
   return supabaseResponse;
 }
 
-const PUBLIC_PATHS = ['/', '/login', '/events'];
+const PUBLIC_PATHS = ['/', '/login', '/events', '/auth/callback'];
 
 export function checkIsPublicPath(pathname: string): boolean {
   // /events/ 配下でも認証が必要なパス
