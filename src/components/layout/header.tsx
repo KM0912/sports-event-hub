@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import {
   CalendarPlus,
   LayoutDashboard,
@@ -18,6 +19,9 @@ export async function Header() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '/';
 
   let pendingCount = 0;
   let unreadChatCount = 0;
@@ -48,6 +52,9 @@ export async function Header() {
     unreadChatCount = unread || 0;
   }
 
+  const isActive = (path: string) =>
+    pathname === path || pathname.startsWith(path + '/');
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -62,13 +69,14 @@ export async function Header() {
             バドミントン練習会 宮城
           </span>
         </Link>
-        <nav className="flex items-center gap-0.5 sm:gap-2">
+        <nav className="flex items-center gap-0.5 sm:gap-2 [&_a]:active:scale-95 [&_a]:transition-transform">
           {user ? (
             <>
               <Link href={ROUTES.EVENTS_NEW}>
                 <Button
+                  variant="ghost"
                   size="sm"
-                  className="min-h-10 min-w-10 gap-1.5 bg-primary font-semibold shadow-sm hover:bg-primary/90 sm:min-h-0 sm:min-w-0"
+                  className={`min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0 ${isActive('/events/new') ? 'bg-accent text-accent-foreground' : ''}`}
                 >
                   <CalendarPlus className="h-4 w-4" />
                   <span className="hidden sm:inline">練習会を作成</span>
@@ -78,7 +86,7 @@ export async function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0"
+                  className={`relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0 ${isActive('/dashboard') ? 'bg-accent text-accent-foreground' : ''}`}
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   <span className="hidden sm:inline">ダッシュボード</span>
@@ -96,7 +104,7 @@ export async function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0"
+                  className={`relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0 ${isActive('/my-page') ? 'bg-accent text-accent-foreground' : ''}`}
                 >
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">マイページ</span>

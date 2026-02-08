@@ -62,17 +62,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary/10" />
             <div className="absolute -bottom-10 -left-10 h-60 w-60 rounded-full bg-accent/10" />
           </div>
-          <div className="container relative mx-auto px-4 py-10 sm:py-16 md:py-20">
+          <div className="container relative mx-auto px-4 py-6 sm:py-16 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
-              <h1 className="mb-4 text-2xl font-black tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-                宮城県の
+              <h1 className="mb-3 text-xl font-black tracking-tight sm:mb-4 sm:text-3xl md:text-4xl lg:text-5xl">
                 <span className="text-primary">バドミントン練習会</span>
                 を見つけよう
               </h1>
-              <p className="mb-6 text-sm leading-relaxed text-muted-foreground sm:mb-8 sm:text-base md:text-lg">
-                レベル・地域で自分にぴったりの練習会を検索。
-                <br className="hidden sm:block" />
-                かんたんに参加申請、主催者とのチャットもスムーズ。
+              <p className="mb-5 text-sm leading-relaxed text-muted-foreground sm:mb-8 sm:text-base md:text-lg">
+                宮城県内の練習会をレベル・地域で検索。かんたんに参加申請できます。
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link href="#events">
@@ -97,7 +94,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </div>
             </div>
             {/* 特徴 */}
-            <div className="mx-auto mt-10 grid max-w-3xl gap-6 sm:mt-14 sm:grid-cols-3">
+            <div className="mx-auto mt-6 grid max-w-3xl gap-4 sm:mt-14 sm:gap-6 sm:grid-cols-3">
               <div className="flex flex-col items-center gap-2 text-center">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
                   <Search className="h-5 w-5 text-primary" />

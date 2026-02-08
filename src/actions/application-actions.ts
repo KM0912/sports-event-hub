@@ -36,6 +36,21 @@ export async function applyToEvent(
 
   const supabase = await createClient();
 
+  // プロフィール存在チェック（FK制約違反防止）
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile) {
+    return {
+      success: false,
+      error: 'プロフィールを設定してから申請してください',
+      code: 'BUSINESS_RULE_ERROR',
+    };
+  }
+
   // イベント取得
   const { data: event } = await supabase
     .from('events')
@@ -134,7 +149,7 @@ export async function applyToEvent(
   }
 
   // 通知送信（非同期、失敗しても申請は成功扱い）
-  const { data: profile } = await supabase
+  const { data: applicantProfile } = await supabase
     .from('profiles')
     .select('display_name')
     .eq('id', user.id)
@@ -150,7 +165,7 @@ export async function applyToEvent(
     data: {
       organizerId: event.organizer_id,
       organizerName: organizerProfile?.display_name || '',
-      applicantName: profile?.display_name || '',
+      applicantName: applicantProfile?.display_name || '',
       eventTitle: '',
       eventId,
     },

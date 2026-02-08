@@ -28,7 +28,7 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <Link href={ROUTES.EVENT_DETAIL(event.id)} className="group block">
-      <Card className="relative overflow-hidden border-border/60 py-0 shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-primary/5">
+      <Card className="relative overflow-hidden border-border/60 py-0 shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-primary/5 active:scale-[0.98] active:shadow-sm">
         {/* レベルカラーバー */}
         <div
           className={`h-1 w-full ${
