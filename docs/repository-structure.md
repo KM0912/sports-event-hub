@@ -217,16 +217,16 @@ src/constants/
 **役割**: データベースマイグレーション、Edge Functions、シードデータ
 
 **データベース構成**:
-- **データベース名**: `portfolio_db`
-- **スキーマ名**: `sports_event_hub`
-- 1つのDBに複数プロジェクトを同居させる運用（詳細は `architecture.md` を参照）
+- **データベース名**: `sports-event-hub`（Supabaseプロジェクト）
+- **スキーマ名**: `public`（デフォルト）
+- プロジェクト専用のSupabaseプロジェクトを使用（詳細は `architecture.md` を参照）
 
 **構造**:
 ```
 supabase/
 ├── config.toml                 # Supabase CLI設定
 ├── migrations/                 # DBマイグレーション
-│   ├── 00001_create_schema.sql          # sports_event_hubスキーマ作成
+│   ├── 00001_create_schema.sql          # スキーマ設定（publicスキーマ使用）
 │   ├── 00002_create_profiles.sql        # profilesテーブル
 │   ├── 00003_create_events.sql          # eventsテーブル
 │   ├── 00004_create_applications.sql    # applicationsテーブル

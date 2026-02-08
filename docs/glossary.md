@@ -449,9 +449,9 @@ UIレイヤー (app/, components/)
 **定義**: 1つのPostgreSQLデータベース内で、スキーマを使ってプロジェクトごとのテーブル群を分離する設計
 
 **本プロジェクトでの適用**:
-- データベース名: `portfolio_db`
-- スキーマ名: `sports_event_hub`
-- 同一DB内に複数プロジェクトが同居する運用
+- データベース名: `sports-event-hub`（Supabaseプロジェクト）
+- スキーマ名: `public`（デフォルト）
+- プロジェクト専用のSupabaseプロジェクトを使用
 
 **関連ドキュメント**: [アーキテクチャ設計書](./architecture.md)
 

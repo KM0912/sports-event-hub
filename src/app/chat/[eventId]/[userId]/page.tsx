@@ -51,7 +51,7 @@ export default function ChatPage() {
         'postgres_changes',
         {
           event: 'INSERT',
-          schema: 'sports_event_hub',
+          schema: 'public',
           table: 'chat_messages',
           filter: `event_id=eq.${eventId}`,
         },

@@ -100,7 +100,7 @@ INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, 
 -- =============================================================================
 -- プロフィール
 -- =============================================================================
-INSERT INTO sports_event_hub.profiles (id, display_name) VALUES
+INSERT INTO profiles (id, display_name) VALUES
   ('a1111111-1111-1111-1111-111111111111', 'バド太郎'),
   ('b2222222-2222-2222-2222-222222222222', 'バド花子'),
   ('c3333333-3333-3333-3333-333333333333', 'バド次郎');
@@ -108,7 +108,7 @@ INSERT INTO sports_event_hub.profiles (id, display_name) VALUES
 -- =============================================================================
 -- イベント（未来日のイベントを中心に作成）
 -- =============================================================================
-INSERT INTO sports_event_hub.events (
+INSERT INTO events (
   id, organizer_id, title, start_datetime, end_datetime,
   venue_name, venue_address, municipality, level, level_note,
   capacity, fee, description, rules, equipment, notes, deadline_hours_before, status
@@ -222,7 +222,7 @@ INSERT INTO sports_event_hub.events (
 -- =============================================================================
 -- 申請データ
 -- =============================================================================
-INSERT INTO sports_event_hub.applications (id, event_id, applicant_id, comment, status) VALUES
+INSERT INTO applications (id, event_id, applicant_id, comment, status) VALUES
 -- 花子がイベント1に申請 → 承認済み
 (
   'd1111111-1111-1111-1111-111111111111',
@@ -267,7 +267,7 @@ INSERT INTO sports_event_hub.applications (id, event_id, applicant_id, comment, 
 -- =============================================================================
 -- チャットメッセージ（承認済みの関係者間のみ）
 -- =============================================================================
-INSERT INTO sports_event_hub.chat_messages (event_id, sender_id, receiver_id, content, is_read) VALUES
+INSERT INTO chat_messages (event_id, sender_id, receiver_id, content, is_read) VALUES
 -- イベント1: 太郎（主催者）↔ 花子（承認済み参加者）
 (
   'e1111111-1111-1111-1111-111111111111',

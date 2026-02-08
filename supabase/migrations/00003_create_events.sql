@@ -1,6 +1,6 @@
-CREATE TABLE sports_event_hub.events (
+CREATE TABLE events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  organizer_id UUID NOT NULL REFERENCES sports_event_hub.profiles(id) ON DELETE CASCADE,
+  organizer_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   title TEXT NOT NULL CHECK (char_length(title) BETWEEN 1 AND 100),
   start_datetime TIMESTAMPTZ NOT NULL,
   end_datetime TIMESTAMPTZ NOT NULL,
@@ -23,12 +23,12 @@ CREATE TABLE sports_event_hub.events (
 );
 
 CREATE TRIGGER events_updated_at
-  BEFORE UPDATE ON sports_event_hub.events
-  FOR EACH ROW EXECUTE FUNCTION sports_event_hub.update_updated_at();
+  BEFORE UPDATE ON events
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 -- 検索用インデックス
-CREATE INDEX idx_events_start_datetime ON sports_event_hub.events (start_datetime);
-CREATE INDEX idx_events_municipality ON sports_event_hub.events (municipality);
-CREATE INDEX idx_events_level ON sports_event_hub.events (level);
-CREATE INDEX idx_events_status ON sports_event_hub.events (status);
-CREATE INDEX idx_events_organizer_id ON sports_event_hub.events (organizer_id);
+CREATE INDEX idx_events_start_datetime ON events (start_datetime);
+CREATE INDEX idx_events_municipality ON events (municipality);
+CREATE INDEX idx_events_level ON events (level);
+CREATE INDEX idx_events_status ON events (status);
+CREATE INDEX idx_events_organizer_id ON events (organizer_id);
