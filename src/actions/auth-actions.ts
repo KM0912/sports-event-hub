@@ -56,7 +56,7 @@ export async function signInWithGoogle(): Promise<
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: 'http://127.0.0.1:3000/auth/callback',
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://127.0.0.1:3000'}/auth/callback`,
     },
   });
 
