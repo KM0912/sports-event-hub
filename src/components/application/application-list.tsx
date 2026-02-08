@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   UserCheck,
   UserX,
   ShieldBan,
   Users,
   MessageSquare,
+  MessageCircle,
   Clock,
   ClipboardList,
   Loader2,
@@ -20,16 +22,19 @@ import {
 } from '@/actions/application-actions';
 import type { ApplicationWithApplicant } from '@/types/application';
 import { formatDate } from '@/lib/utils/date-utils';
+import { ROUTES } from '@/constants/routes';
 import { toast } from 'sonner';
 
 interface ApplicationListProps {
   applications: ApplicationWithApplicant[];
   capacity: number;
+  eventId: string;
 }
 
 export function ApplicationList({
   applications: initialApplications,
   capacity,
+  eventId,
 }: ApplicationListProps) {
   const [applications, setApplications] = useState(initialApplications);
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -145,6 +150,21 @@ export function ApplicationList({
                     </p>
                   </div>
                 </div>
+                {app.status === 'approved' && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="h-9 gap-1 border-border/60"
+                    >
+                      <Link href={ROUTES.CHAT(eventId, app.applicant.id)}>
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        チャット
+                      </Link>
+                    </Button>
+                  </div>
+                )}
                 {app.status === 'pending' && (
                   <div className="flex flex-wrap gap-2">
                     <Button

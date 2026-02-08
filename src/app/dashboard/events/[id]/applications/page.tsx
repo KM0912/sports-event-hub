@@ -33,6 +33,7 @@ export default async function ApplicationsPage({
         <ApplicationList
           applications={applications}
           capacity={event.capacity}
+          eventId={id}
         />
       </div>
     </div>
