@@ -30,11 +30,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
-
-  // 認証が不要なパス
-  const publicPaths = ['/', '/login', '/events'];
-  const isPublicPath =
-    publicPaths.includes(pathname) || pathname.startsWith('/events/');
+  const isPublicPath = checkIsPublicPath(pathname);
 
   // 未認証ユーザーが認証必須パスにアクセスした場合
   if (!user && !isPublicPath) {
@@ -59,4 +55,17 @@ export async function updateSession(request: NextRequest) {
   }
 
   return supabaseResponse;
+}
+
+const PUBLIC_PATHS = ['/', '/login', '/events'];
+
+export function checkIsPublicPath(pathname: string): boolean {
+  // /events/ 配下でも認証が必要なパス
+  const isAuthRequiredEventPath =
+    pathname === '/events/new' || /^\/events\/[^/]+\/edit$/.test(pathname);
+
+  return (
+    (PUBLIC_PATHS.includes(pathname) || pathname.startsWith('/events/')) &&
+    !isAuthRequiredEventPath
+  );
 }
