@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Noto_Sans_JP } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
+import { GoogleAnalytics } from '@/components/google-analytics';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import './globals.css';
@@ -33,6 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className={notoSansJP.variable}>
+      <GoogleAnalytics />
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <Header />
         <main className="flex-1">{children}</main>
