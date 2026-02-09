@@ -1,18 +1,17 @@
 import { ProfileForm } from '@/components/auth/profile-form';
 import { getProfile } from '@/actions/profile-actions';
-import { redirect } from 'next/navigation';
-import { ROUTES } from '@/constants/routes';
 
 export default async function ProfileSetupPage() {
   const result = await getProfile();
 
-  if (result.success && result.data) {
-    redirect(ROUTES.HOME);
-  }
+  const existingProfile = result.success ? result.data : null;
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <ProfileForm />
+      <ProfileForm
+        initialDisplayName={existingProfile?.displayName ?? ''}
+        isEdit={!!existingProfile}
+      />
     </div>
   );
 }

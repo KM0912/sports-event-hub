@@ -1,27 +1,16 @@
 import Link from 'next/link';
-import { headers } from 'next/headers';
-import {
-  CalendarPlus,
-  LayoutDashboard,
-  LogIn,
-  LogOut,
-  User,
-} from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { signOut } from '@/actions/auth-actions';
 import { ShuttlecockIcon } from '@/components/layout/shuttlecock-icon';
+import { NavLinks } from '@/components/layout/nav-links';
 
 export async function Header() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '/';
 
   let pendingCount = 0;
   let unreadChatCount = 0;
@@ -52,9 +41,6 @@ export async function Header() {
     unreadChatCount = unread || 0;
   }
 
-  const isActive = (path: string) =>
-    pathname === path || pathname.startsWith(path + '/');
-
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -71,65 +57,10 @@ export async function Header() {
         </Link>
         <nav className="flex items-center gap-0.5 sm:gap-2 [&_a]:active:scale-95 [&_a]:transition-transform">
           {user ? (
-            <>
-              <Link href={ROUTES.EVENTS_NEW}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0 ${isActive('/events/new') ? 'bg-accent text-accent-foreground' : ''}`}
-                >
-                  <CalendarPlus className="h-4 w-4" />
-                  <span className="hidden sm:inline">練習会を作成</span>
-                </Button>
-              </Link>
-              <Link href={ROUTES.DASHBOARD}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0 ${isActive('/dashboard') ? 'bg-accent text-accent-foreground' : ''}`}
-                >
-                  <LayoutDashboard className="h-4 w-4" />
-                  <span className="hidden sm:inline">ダッシュボード</span>
-                  {pendingCount > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center px-1 text-[10px] font-bold"
-                    >
-                      {pendingCount}
-                    </Badge>
-                  )}
-                </Button>
-              </Link>
-              <Link href={ROUTES.MY_PAGE}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`relative min-h-10 min-w-10 gap-1.5 sm:min-h-0 sm:min-w-0 ${isActive('/my-page') ? 'bg-accent text-accent-foreground' : ''}`}
-                >
-                  <User className="h-4 w-4" />
-                  <span className="hidden sm:inline">マイページ</span>
-                  {unreadChatCount > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center px-1 text-[10px] font-bold"
-                    >
-                      {unreadChatCount}
-                    </Badge>
-                  )}
-                </Button>
-              </Link>
-              <form action={signOut}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  type="submit"
-                  className="min-h-10 min-w-10 gap-1.5 text-muted-foreground hover:text-foreground sm:min-h-0 sm:min-w-0"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span className="hidden sm:inline">ログアウト</span>
-                </Button>
-              </form>
-            </>
+            <NavLinks
+              pendingCount={pendingCount}
+              unreadChatCount={unreadChatCount}
+            />
           ) : (
             <Link href={ROUTES.LOGIN}>
               <Button size="sm" className="gap-1.5 font-semibold shadow-sm">

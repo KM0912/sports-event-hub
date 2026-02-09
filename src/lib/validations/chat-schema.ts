@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const chatMessageSchema = z.object({
-  eventId: z.string().uuid('無効なイベントIDです'),
-  receiverId: z.string().uuid('無効なユーザーIDです'),
+  eventId: z.string().min(1, '無効なイベントIDです'),
+  receiverId: z.string().min(1, '無効なユーザーIDです'),
   content: z
     .string()
     .min(1, 'メッセージを入力してください')

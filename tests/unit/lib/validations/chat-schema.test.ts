@@ -34,18 +34,18 @@ describe('chatMessageSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('無効なeventIdを拒否する', () => {
+  it('空のeventIdを拒否する', () => {
     const result = chatMessageSchema.safeParse({
       ...validData,
-      eventId: 'invalid',
+      eventId: '',
     });
     expect(result.success).toBe(false);
   });
 
-  it('無効なreceiverIdを拒否する', () => {
+  it('空のreceiverIdを拒否する', () => {
     const result = chatMessageSchema.safeParse({
       ...validData,
-      receiverId: 'invalid',
+      receiverId: '',
     });
     expect(result.success).toBe(false);
   });

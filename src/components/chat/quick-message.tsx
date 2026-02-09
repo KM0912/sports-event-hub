@@ -8,12 +8,19 @@ import { toast } from 'sonner';
 interface QuickMessageProps {
   eventId: string;
   receiverId: string;
+  onMessageSent?: (messageId: string, content: string) => void;
 }
 
-export function QuickMessage({ eventId, receiverId }: QuickMessageProps) {
+export function QuickMessage({
+  eventId,
+  receiverId,
+  onMessageSent,
+}: QuickMessageProps) {
   async function handleClick(msg: string) {
     const result = await sendMessage(eventId, receiverId, msg);
-    if (!result.success) {
+    if (result.success) {
+      onMessageSent?.(result.data.messageId, msg);
+    } else {
       toast.error(result.error);
     }
   }

@@ -114,6 +114,27 @@ export default function ChatPage() {
     };
   }, [currentUserId, eventId, otherUserId]);
 
+  // 送信メッセージを即座にローカル state に追加
+  function handleMessageSent(messageId: string, content: string) {
+    if (!currentUserId) return;
+
+    const optimisticMessage: ChatMessageWithSender = {
+      id: messageId,
+      eventId,
+      senderId: currentUserId,
+      receiverId: otherUserId,
+      content,
+      isRead: false,
+      createdAt: new Date().toISOString(),
+      sender: { id: currentUserId, displayName: '' },
+    };
+
+    setMessages((prev) => {
+      if (prev.some((m) => m.id === messageId)) return prev;
+      return [...prev, optimisticMessage];
+    });
+  }
+
   // 新メッセージ時にスクロール
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -145,8 +166,16 @@ export default function ChatPage() {
         <div ref={bottomRef} />
       </div>
       <div className="shrink-0 space-y-2 border-t pt-2 sm:pt-3">
-        <QuickMessage eventId={eventId} receiverId={otherUserId} />
-        <ChatInput eventId={eventId} receiverId={otherUserId} />
+        <QuickMessage
+          eventId={eventId}
+          receiverId={otherUserId}
+          onMessageSent={handleMessageSent}
+        />
+        <ChatInput
+          eventId={eventId}
+          receiverId={otherUserId}
+          onMessageSent={handleMessageSent}
+        />
       </div>
     </div>
   );

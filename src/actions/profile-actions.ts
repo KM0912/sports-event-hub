@@ -73,6 +73,7 @@ export async function createProfile(
   });
 
   if (error) {
+    console.error('Profile creation error:', error);
     return {
       success: false,
       error: 'プロフィールの作成に失敗しました',
