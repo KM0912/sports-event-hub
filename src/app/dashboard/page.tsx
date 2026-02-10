@@ -9,6 +9,7 @@ import {
   ClipboardList,
   Pencil,
   CalendarX,
+  Copy,
 } from 'lucide-react';
 import { getAuthUser } from '@/actions/auth-actions';
 import { createClient } from '@/lib/supabase/server';
@@ -188,6 +189,17 @@ export default async function DashboardPage() {
                           </Link>
                         </Button>
                       )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="gap-1 border-border/60"
+                      >
+                        <Link href={ROUTES.EVENT_COPY(event.id)}>
+                          <Copy className="h-3.5 w-3.5" />
+                          コピー
+                        </Link>
+                      </Button>
                     </div>
                   </div>
                   {/* モバイル用アクションボタン */}
@@ -216,6 +228,17 @@ export default async function DashboardPage() {
                         </Link>
                       </Button>
                     )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="h-9 flex-1 gap-1 border-border/60"
+                    >
+                      <Link href={ROUTES.EVENT_COPY(event.id)}>
+                        <Copy className="h-3.5 w-3.5" />
+                        コピー
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </CardContent>

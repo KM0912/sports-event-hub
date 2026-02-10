@@ -5,6 +5,7 @@ export const ROUTES = {
   EVENTS_NEW: '/events/new',
   EVENT_DETAIL: (id: string) => `/events/${id}`,
   EVENT_EDIT: (id: string) => `/events/${id}/edit`,
+  EVENT_COPY: (id: string) => `/events/${id}/copy`,
   DASHBOARD: '/dashboard',
   APPLICATIONS: (eventId: string) =>
     `/dashboard/events/${eventId}/applications`,
